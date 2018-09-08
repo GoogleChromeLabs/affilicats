@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>🐈 AffiliCats — Find the cutest cats online!</title>  
+    <script>
+      if (!location.protocol === 'https:') {
+        location.protocol = 'https:';
+      }
+      if (!('IntersectionObserver' in window)) {
+        document.write('<script src="https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js"><\/script>');
+      }
+    </script>    
+    <script src="/client.js" defer></script>    
+    <link rel="icon" href="https://cdn.glitch.com/8194e9d5-f0a3-4d19-9253-7797a0366c1c%2Fcat.png?1536335780609">
+    <link rel="preload" href="https://cdn.glitch.com/8194e9d5-f0a3-4d19-9253-7797a0366c1c%2Fcat.svg?1536143545629" as="image">
+    <style>
+      html {
+        box-sizing: border-box;
+      }
+      
+      *, *:before, *:after {
+        box-sizing: inherit;
+      }
+      
+      body {
+        font-size: 14pt;
+        font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
+        margin: .5em;
+      }
+
+      h1 {
+        font-style: italic;
+        color: #373fff;
+      }
+
+      figure {
+        background-color: #eee;
+        border-radius: .25em;
+        padding: 1em;
+        margin: .5em;        
+      }
+      
+      figure img {
+        width: 100%;
+        object-fit: cover;
+      }
+      
+      figcaption {
+        background-color: #eee;
+      }
+      
+      form {
+        display: flex;
+      }
+      
+      .search {
+        background-color: #fff;
+        position: sticky;
+        top: 0;        
+        z-index: 1;
+      }
+      
+      .search input {
+        font-size: inherit;
+        border: solid black .1em;
+        border-radius: .25em;
+        margin: 1em 0;
+        width: 80%;
+      }
+      
+      .search button {
+        font-size: inherit;
+        border: solid black .1em;
+        border-radius: .25em;
+        margin: 1em 0;
+        width: 20%;        
+      }
+      
+      .container {
+        border: solid black .1em;
+        border-radius: .25em;
+        margin: 1em 0;
+      }
+
+      .wrapper {
+        display: flex;
+        justify-content: center;
+      }
+      
+      .outlink {
+        width: 90%;
+        height: 2em;
+        display: block;
+        border-radius: .25em;
+        background-color: darkgreen;
+        color: white;
+        margin: .5em 0;
+        padding-top: .25em;
+        text-align: center;
+        text-decoration: none;
+      }
+      
+      .offers {
+        color: maroon;
+        list-style: none;
+      }
+
+      .stars {
+        color: transparent;  
+        text-shadow: 0 0 0 #fdd835;  
+      }
+
+      .price {
+        color: transparent;  
+        text-shadow: 0 0 0 darkgray;  
+      }
+
+      .tabs {
+        position: relative;        
+        height: 25em;
+        clear: both;
+      }
+
+      .tab {
+        padding: 1em 0;
+        border-top-left-radius: 1em;
+        border-top-right-radius: 1em;
+      }
+      
+      .tabs .tab {
+        float: left;
+      }
+
+      .tabs label {
+        margin-right: 1em;
+      }
+
+      .tabs .tab .tabcontent {
+        position: absolute;	
+        left: 0;
+        width: 100%;
+      }
+
+      .tabcontent {
+        display: none;
+        height: 22em;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        padding: .25em;
+      }
+
+      .checkboxtab {
+        opacity: 0;
+      }
+      
+      .checkboxtab:focus ~ label {        
+        outline: blue auto 5px;
+        outline: -webkit-focus-ring-color auto 5px;
+      }
+
+      .checkboxtab:checked ~ .tabcontent {
+        display: block;
+      }  
+      
+      .reviews {
+        background-color: red;
+      }
+      
+      .location {
+        background-color: orange;
+      }
+      
+      .photos {
+        background-color: yellow;        
+      }
+      
+      .gallery {
+        display: grid;
+        grid-gap: .25em;
+        grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));        
+        grid-auto-rows: 5em 5em;
+        grid-auto-flow: dense;
+        height: 100%;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+      }
+      
+      .gallery img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      
+      @media (min-width: 320px) {        
+        .gallery img:first-child {
+          grid-area: 1 / 1 / span 2 / span 2;
+        }          
+        .gallery img:nth-child(3n) {
+          grid-column: span 2;
+        }
+      }
+      
+      .offline {        
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 5em;
+        background-color: #ccc;
+        text-align: center;
+      }
+    </style>    
+    <link id="favicon" rel="icon" href="https://cdn.glitch.com/8194e9d5-f0a3-4d19-9253-7797a0366c1c%2Fcat.svg?1536143545629" type="image/svg">
+  </head>
+  <body>    
+    <header>
+      <h1>🐈 AffiliCats</h1>
+      <p>
+        Find the cutest cats online!
+      </p>
+    </header>    
+    <div class="search">
+      <form>        
+        <input type="search" value="Felis silvestris catus">
+        <button type="submit" value="Search">Search</button>
+      </form>
+    </div>
+    <main data-hydrated="false"></main>
+    <div hidden class="offline">⚠️ Seems like we're offline at the moment</div>
+    <footer>© 2018 AffiliCats</footer>
+
+    <template id="cat">    
+      <div class="container">
+        <div class="header">
+          <figure>
+            <img height="100" src="https://cdn.glitch.com/8194e9d5-f0a3-4d19-9253-7797a0366c1c%2Fcat.svg?1536143545629">
+            <figcaption>⏳ Loading cats…</figcaption>
+          </figure>                
+          <ul class="offers lazyload">
+            <li>⏳ Loading offers…</li>
+          </ul>
+        </div>
+        <ul>
+          <li class="stars">Cuteness rating: ⏳</li>
+          <li class="price">Price range: ⏳</li>
+        </ul>
+        <div class="wrapper">
+          <a class="outlink">Loading Deal…</a>        
+        </div>        
+        <div class="tabs">      
+          <div class="tab photos">			                
+            <input tabindex="0" type="radio" class="checkboxtab" checked>            
+            <label>Photos</label>
+            <div class="tabcontent photos lazyload">
+              ⏳ Loading photos…
+            </div>            
+          </div>
+          <div class="tab reviews">			                
+            <input tabindex="0" type="radio" class="checkboxtab">            
+            <label>Reviews</label>
+            <div class="tabcontent reviews lazyload">
+              ⏳ Loading reviews…
+            </div>      
+          </div>
+          <div class="tab location">			                
+            <input tabindex="0" type="radio" class="checkboxtab">            
+            <label>Location</label>
+            <div class="tabcontent location">
+              <img width="200" height="150" class="map lazyload" src="https://cdn.glitch.com/8194e9d5-f0a3-4d19-9253-7797a0366c1c%2Fmap.svg?1535631025878">
+              <div>
+                Latitude: <span class="lat"></span>
+                <br>
+                Longitude: <span class="long"></span>
+              </div>
+            </div>      
+          </div>
+        </div>
+      </div>
+    </template>    
+  </body>
+</html>
