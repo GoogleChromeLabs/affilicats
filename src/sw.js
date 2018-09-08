@@ -1,26 +1,22 @@
-self.importScripts('constants.js');
-
 const VERSION = 1535985208500;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 3000;
 
+const OFFLINE_IMG_URL = '/img/offline.svg';
+const TIMEOUT_IMG_URL = '/img/timeout.svg';
 const STATIC_FILES = [
-  '/',        
-  '/forward',
-  '/client.js',
-  CAT_IMG_URL,
-  ICON_IMG_URL,
-  MAP_IMG_URL,
+  '/',
+  '/index.html',
+  '/forward.html',
+  '/js/client.js',
+  '/img/cat.png',
+  '/img/map.svg',
   OFFLINE_IMG_URL,
   TIMEOUT_IMG_URL
 ];
 
-const CORS_REQUIRED = [
-  
-];
-
-self.addEventListener('install', async (installEvent) => {  
+self.addEventListener('install', async (installEvent) => {
   self.skipWaiting();
   installEvent.waitUntil((async () => {
     const cache = await caches.open(OFFLINE_CACHE);
@@ -36,21 +32,21 @@ self.addEventListener('activate', (activateEvent) => {
         return caches.delete(key);
       }
     }))
-    .then(() => self.clients.claim())  
-  })());  
+    .then(() => self.clients.claim());
+  })());
 });
 
 self.addEventListener('fetch', (fetchEvent) => {
-  
+
   const cacheOnly = async (request, options = {}) => {
-    const cache = await caches.open(OFFLINE_CACHE);                
+    const cache = await caches.open(OFFLINE_CACHE);
     return cache.match(request, options);
   };
-    
+
   const networkWithTimeout = async (request, destination, url) => {
-    
-    const waitPromise = new Promise(resolve => setTimeout(() => {  
-      if (destination === 'image') {        
+
+    const waitPromise = new Promise(resolve => setTimeout(() => {
+      if (destination === 'image') {
         return resolve(cacheOnly(TIMEOUT_IMG_URL));
       }
       if (!destination) {
@@ -58,59 +54,56 @@ self.addEventListener('fetch', (fetchEvent) => {
           const blob = new Blob(
               [JSON.stringify({query: {pages: {}}})],
               {type: 'application/json'});
-          return resolve(new Response(blob));                    
+          return resolve(new Response(blob));
         }
-        if (url.origin === 'https://www.random.org') {                    
+        if (url.origin === 'https://www.random.org') {
           const blob = new Blob(
               ['Offers timed out while loading\n'],
               {type: 'text/plain'});
-          return resolve(new Response(blob));                    
+          return resolve(new Response(blob));
         }
         if (url.origin === 'https://baconipsum.com') {
           const blob = new Blob(
               [JSON.stringify(['Reviews took too long to load…'])],
               {type: 'application/json'});
-          return resolve(new Response(blob));                    
+          return resolve(new Response(blob));
         }
         if (url.origin === 'https://placekitten.com') {
           return resolve(cacheOnly(TIMEOUT_IMG_URL));
         }
-      }      
+      }
     }, TIMEOUT));
-    
+
     const sameOrigin = url.origin === location.origin;
-    const options = sameOrigin ?
-          {} :
-          CORS_REQUIRED.includes(url.origin) ? {mode: 'no-cors'} : {};    
-    const fetchPromise = fetch(request, options)
-    .then(response => {    
-      if (sameOrigin && !response.ok) {        
+    const fetchPromise = fetch(request)
+    .then(response => {
+      if (sameOrigin && !response.ok) {
         throw new TypeError(`Could not load ${request.url}`);
       }
       return response;
     })
     .catch(e => {
       if (destination === 'image') {
-        return cacheOnly(OFFLINE_IMG_URL); 
+        return cacheOnly(OFFLINE_IMG_URL);
       }
       if (!destination) {
         if (url.origin === 'https://commons.wikimedia.org') {
           const blob = new Blob(
               [JSON.stringify({query: {pages: {}}})],
               {type: 'application/json'});
-          return new Response(blob);                    
+          return new Response(blob);
         }
-        if (url.origin === 'https://www.random.org') {                    
+        if (url.origin === 'https://www.random.org') {
           const blob = new Blob(
               ['Offers can\'t be loaded while offline\n'],
               {type: 'text/plain'});
-          return new Response(blob);                    
+          return new Response(blob);
         }
         if (url.origin === 'https://baconipsum.com') {
           const blob = new Blob(
               [JSON.stringify(['Reviews can\'t be loaded while offline…'])],
               {type: 'application/json'});
-          return new Response(blob);                    
+          return new Response(blob);
         }
         if (url.origin === 'https://placekitten.com') {
           return cacheOnly(OFFLINE_IMG_URL);
@@ -123,14 +116,14 @@ self.addEventListener('fetch', (fetchEvent) => {
       fetchPromise
     ]);
   };
-  
+
   fetchEvent.respondWith((async () => {
     const request = fetchEvent.request;
     if (request.mode === 'navigate') {
       return cacheOnly(request, {ignoreSearch: true});
     }
     const destination = request.destination;
-    const url = new URL(request.url);    
+    const url = new URL(request.url);
     if (url.protocol === 'chrome-extension:') {
       return new Response();
     }

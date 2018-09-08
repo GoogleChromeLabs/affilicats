@@ -1,27 +1,38 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
-  "name": "hello-express",
-  "version": "0.0.1",
-  "description": "A simple Node app built on Express, instantly up and running.",
-  "main": "server.js",
+  "name": "affilicats",
+  "version": "1.0.0",
+  "description": "Progressive Web App demo that showcases flaky network resilience measures",
   "scripts": {
-    "start": "node server.js"
-  },
-  "dependencies": {
-    "express": "^4.16.3"
-  },
-  "engines": {
-    "node": "8.x"
+    "build": "rm -rf docs && mkdir -p docs && minify src/js/client.js --out-file docs/js/client.js && minify src/sw.js --out-file docs/sw.js && node build/build.js > docs/manifest.webmanifest && imagemin src/img/*.{webp,png,svg} --out-dir=docs/img && html-minifier --collapse-boolean-attributes --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --custom-attr-collapse /on/ --remove-attribute-quotes --process-scripts application/json --sort-attributes --sort-class-name --minify-urls -o docs/index.html src/index.html && html-minifier --collapse-boolean-attributes --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --custom-attr-collapse /on/ --remove-attribute-quotes --process-scripts application/json --sort-attributes --sort-class-name --minify-urls -o docs/forward.html src/forward.html",
+    "lint": "eslint src/ --fix"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
+    "type": "git",
+    "url": "git+https://github.com/tomayac/affilicats.git"
   },
-  "license": "MIT",
   "keywords": [
-    "node",
-    "glitch",
-    "express"
-  ]
+    "PWA",
+    "service",
+    "worker"
+  ],
+  "author": "Thomas Steiner <steiner.thomas@gmail.com> (http://blog.tomayac.com/)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/tomayac/affilicats/issues"
+  },
+  "homepage": "https://github.com/tomayac/affilicats#readme",
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 7
+    },
+    "extends": [
+      "google"
+    ],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "serviceworker": true,
+      "node": true
+    }
+  }
 }

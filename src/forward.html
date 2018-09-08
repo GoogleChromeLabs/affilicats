@@ -2,19 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">   
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="icon" href="https://cdn.glitch.com/8194e9d5-f0a3-4d19-9253-7797a0366c1c%2Fcat.png?1536335780609">
-    <title>🐈 AffiliCats — Find the cutest cats online!</title>  
+    <title>🐈 AffiliCats — Find the cutest cats online!</title>
     <style>
       html {
         box-sizing: border-box;
       }
-      
+
       *, *:before, *:after {
         box-sizing: inherit;
       }
-      
+
       body {
         font-size: 14pt;
         font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
@@ -25,12 +25,12 @@
         font-style: italic;
         color: #373fff;
       }
-      
+
       p {
         margin-left: 1.5em;
       }
-      
-      .offline {        
+
+      .offline {
         position: fixed;
         left: 0;
         bottom: 0;
@@ -38,41 +38,41 @@
         height: 5em;
         background-color: #ccc;
         text-align: center;
-      }    
-      
+      }
+
       #hourglass {
         position: absolute;
         left: .5em;
       }
-      
+
       #hourglass.spin {
         animation-name: spinning;
         animation-duration: 1s;
         animation-iteration-count: infinite;
         animation-timing-function: ease-in-out;
       }
-      
+
       @keyframes spinning {
         from {transform:rotate(0deg);}
         to {transform:rotate(360deg);}
       }
-      
+
       a.noclick {
         pointer-events: none;
         cursor: prohibited;
       }
-    </style>    
+    </style>
     <link id="favicon" rel="icon" href="https://cdn.glitch.com/8194e9d5-f0a3-4d19-9253-7797a0366c1c%2Fcat.svg?1536143545629" type="image/svg">
   </head>
-  <body>    
+  <body>
     <header>
       <h1>🐈 AffiliCats</h1>
       <p>
         <span id="hourglass">⏳</span> Forwarding you to <a href="#" id="forward"></a> in <span id="seconds"></span> seconds…
-      </p>      
-    </header>    
+      </p>
+    </header>
     <div hidden class="offline">⚠️ Seems like we're offline at the moment</div>
-    <footer>© 2018 AffiliCats</footer>    
+    <footer>© 2018 AffiliCats</footer>
     <script>
       const REDIRECT_TIMEOUT = 10;
       const offline = document.querySelector('.offline');
@@ -80,14 +80,14 @@
       const seconds = document.getElementById('seconds');
       seconds.textContent = REDIRECT_TIMEOUT;
       const forwardLink = document.getElementById('forward');
-      
+
       const Timer = function(callback, delay) {
         let remaining = delay;
         let timerId;
         let start;
-        
+
         this.running = true;
-        
+
         this.counter = 0;
 
         this.pause = () => {
@@ -102,7 +102,7 @@
           window.clearTimeout(timerId);
           timerId = window.setTimeout(callback, remaining);
         };
-        
+
         window.setInterval(() => {
           if (this.running) {
             this.counter++;
@@ -112,17 +112,17 @@
 
         this.resume();
       }
-      
+
       const params = new URLSearchParams(document.location.search);
-      const url = new URL(params.get('url'));      
+      const url = new URL(params.get('url'));
       forwardLink.textContent = url.host;
       forwardLink.href = url;
-      
+
       const timer = new Timer(() => {
         document.location.href = url;
       }, REDIRECT_TIMEOUT * 1000);
-      
-      const online = navigator.onLine;      
+
+      const online = navigator.onLine;
       offline.hidden = online;
       if (online) {
         hourglass.classList.add('spin');
@@ -131,7 +131,7 @@
         hourglass.classList.remove('spin');
         forwardLink.classList.add('noclick');
       }
-      
+
       window.addEventListener('offline', () => {
         offline.hidden = false;
         hourglass.classList.remove('spin');
@@ -145,7 +145,7 @@
         forwardLink.classList.remove('noclick');
         timer.resume();
       });
-            
-    </script>    
+
+    </script>
   </body>
 </html>
