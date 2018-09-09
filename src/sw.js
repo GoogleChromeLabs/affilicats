@@ -3,15 +3,15 @@ const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 3000;
 
-const OFFLINE_IMG_URL = '/img/offline.svg';
-const TIMEOUT_IMG_URL = '/img/timeout.svg';
+const OFFLINE_IMG_URL = './img/offline.svg';
+const TIMEOUT_IMG_URL = './img/timeout.svg';
 const STATIC_FILES = [
-  '/',
-  '/index.html',
-  '/forward.html',
-  '/js/client.js',
-  '/img/cat.png',
-  '/img/map.svg',
+  './',
+  './index.html',
+  './forward.html',
+  './js/client.js',
+  './img/cat.png',
+  './img/map.svg',
   OFFLINE_IMG_URL,
   TIMEOUT_IMG_URL,
 ];
