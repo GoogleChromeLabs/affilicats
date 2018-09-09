@@ -92,7 +92,7 @@ const renderCats = (data, template, main) => {
         Math.random() * 3) + 1)}`;
     // Outlink
     const a = catContainer.querySelector('.outlink');
-    a.href = `/forward.html?url=${encodeURIComponent(cat.url)}`;
+    a.href = `./forward.html?url=${encodeURIComponent(cat.url)}`;
     a.textContent = 'View Deal';
     // Tabs
     const tabs = catContainer.querySelector('.tabs');
