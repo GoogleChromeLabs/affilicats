@@ -13,7 +13,7 @@ const STATIC_FILES = [
   '/img/cat.png',
   '/img/map.svg',
   OFFLINE_IMG_URL,
-  TIMEOUT_IMG_URL
+  TIMEOUT_IMG_URL,
 ];
 
 self.addEventListener('install', async (installEvent) => {
@@ -27,25 +27,23 @@ self.addEventListener('install', async (installEvent) => {
 self.addEventListener('activate', (activateEvent) => {
   activateEvent.waitUntil((async () => {
     const keys = await caches.keys();
-    return Promise.all(keys.map(key => {
+    return Promise.all(keys.map((key) => {
       if (key !== OFFLINE_CACHE) {
         return caches.delete(key);
       }
     }))
-    .then(() => self.clients.claim());
+        .then(() => self.clients.claim());
   })());
 });
 
 self.addEventListener('fetch', (fetchEvent) => {
-
   const cacheOnly = async (request, options = {}) => {
     const cache = await caches.open(OFFLINE_CACHE);
     return cache.match(request, options);
   };
 
   const networkWithTimeout = async (request, destination, url) => {
-
-    const waitPromise = new Promise(resolve => setTimeout(() => {
+    const waitPromise = new Promise((resolve) => setTimeout(() => {
       if (destination === 'image') {
         return resolve(cacheOnly(TIMEOUT_IMG_URL));
       }
@@ -76,44 +74,44 @@ self.addEventListener('fetch', (fetchEvent) => {
 
     const sameOrigin = url.origin === location.origin;
     const fetchPromise = fetch(request)
-    .then(response => {
-      if (sameOrigin && !response.ok) {
-        throw new TypeError(`Could not load ${request.url}`);
-      }
-      return response;
-    })
-    .catch(e => {
-      if (destination === 'image') {
-        return cacheOnly(OFFLINE_IMG_URL);
-      }
-      if (!destination) {
-        if (url.origin === 'https://commons.wikimedia.org') {
-          const blob = new Blob(
-              [JSON.stringify({query: {pages: {}}})],
-              {type: 'application/json'});
-          return new Response(blob);
-        }
-        if (url.origin === 'https://www.random.org') {
-          const blob = new Blob(
-              ['Offers can\'t be loaded while offline\n'],
-              {type: 'text/plain'});
-          return new Response(blob);
-        }
-        if (url.origin === 'https://baconipsum.com') {
-          const blob = new Blob(
-              [JSON.stringify(['Reviews can\'t be loaded while offline…'])],
-              {type: 'application/json'});
-          return new Response(blob);
-        }
-        if (url.origin === 'https://placekitten.com') {
-          return cacheOnly(OFFLINE_IMG_URL);
-        }
-      }
-      return new Response();
-    });
+        .then((response) => {
+          if (sameOrigin && !response.ok) {
+            throw new TypeError(`Could not load ${request.url}`);
+          }
+          return response;
+        })
+        .catch((e) => {
+          if (destination === 'image') {
+            return cacheOnly(OFFLINE_IMG_URL);
+          }
+          if (!destination) {
+            if (url.origin === 'https://commons.wikimedia.org') {
+              const blob = new Blob(
+                  [JSON.stringify({query: {pages: {}}})],
+                  {type: 'application/json'});
+              return new Response(blob);
+            }
+            if (url.origin === 'https://www.random.org') {
+              const blob = new Blob(
+                  ['Offers can\'t be loaded while offline\n'],
+                  {type: 'text/plain'});
+              return new Response(blob);
+            }
+            if (url.origin === 'https://baconipsum.com') {
+              const blob = new Blob(
+                  [JSON.stringify(['Reviews can\'t be loaded while offline…'])],
+                  {type: 'application/json'});
+              return new Response(blob);
+            }
+            if (url.origin === 'https://placekitten.com') {
+              return cacheOnly(OFFLINE_IMG_URL);
+            }
+          }
+          return new Response();
+        });
     return Promise.race([
       waitPromise,
-      fetchPromise
+      fetchPromise,
     ]);
   };
 

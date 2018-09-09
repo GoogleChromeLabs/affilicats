@@ -5,14 +5,16 @@ const button = document.querySelector('button');
 const template = document.getElementById('cat');
 
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
+  entries.forEach((entry) => {
     if (entry.intersectionRatio > 0) {
       const target = entry.target;
       observer.unobserve(target);
       // Lazy-load image
       if (target.nodeName === 'IMG') {
         // Cache-bust so the browser doesn't use a cached fallback image
-        return target.src = `${target.dataset.src}${/\?/.test(target.dataset.src) ? '&' : '?'}${Math.random().toString().substr(2)}`;
+        return target.src = `${target.dataset.src}${
+            /\?/.test(target.dataset.src) ? '&' : '?'}${
+          Math.random().toString().substr(2)}`;
       }
       const classList = target.classList;
       // Lazy-load photos
@@ -25,7 +27,7 @@ const observer = new IntersectionObserver((entries) => {
       }
       // Lazy-load offers
       if (classList.contains('offers')) {
-        return loadOffers(target)
+        return loadOffers(target);
       }
     }
   });
@@ -44,29 +46,29 @@ const getCats = async (query) => {
       &iiextmetadatafilter=ImageDescription
       &format=json&origin=*`.replace(/\n\s*/g, '');
   return fetch(url)
-  .then(response => {
-    if (!response.ok) {
-      throw new TypeError(`Could not load ${url}`)
-    }
-    return response.json();
-  })
-  .then(data => {
-    return Object.keys(data.query.pages).map(key => {
-      let entry = data.query.pages[key];
-      try {
-        entry = entry.imageinfo[0];
-        const src = entry.thumburl;
-        const url = entry.descriptionshorturl;
-        const width = entry.thumbwidth;
-        const height = entry.thumbheight;
-        const description = entry.extmetadata.ImageDescription.value;
-        return {url, src, description, width, height};
-      } catch (e) {
-        return;
-      }
-    }).filter(item => typeof item !== 'undefined');
-  })
-  .catch(e => console.error(e));
+      .then((response) => {
+        if (!response.ok) {
+          throw new TypeError(`Could not load ${url}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        return Object.keys(data.query.pages).map((key) => {
+          let entry = data.query.pages[key];
+          try {
+            entry = entry.imageinfo[0];
+            const src = entry.thumburl;
+            const url = entry.descriptionshorturl;
+            const width = entry.thumbwidth;
+            const height = entry.thumbheight;
+            const description = entry.extmetadata.ImageDescription.value;
+            return {url, src, description, width, height};
+          } catch (e) {
+            return;
+          }
+        }).filter((item) => typeof item !== 'undefined');
+      })
+      .catch((e) => console.error(e));
 };
 
 const renderCats = (data, template, main) => {
@@ -100,7 +102,7 @@ const renderCats = (data, template, main) => {
     const labels = tabs.querySelectorAll('label');
     tabs.querySelectorAll('input').forEach((input, i) => {
       const id = Math.random().toString().substr(2);
-      input.name = `tabgroup${index}`
+      input.name = `tabgroup${index}`;
       input.id = id;
       labels[i].setAttribute('for', id);
     });
@@ -132,28 +134,28 @@ const loadOffers = (offers) => {
       ?num=${Math.floor(Math.random() * 5) + 2}
       &min=5&max=20&col=1&base=10&format=plain&rnd=new`.replace(/\n\s*/g, '');
   fetch(url)
-  .then(response => {
-    if (!response.ok) {
-      throw new TypeError(`Could not load ${url}`)
-    }
-    return response.text();
-  })
-  .then(text => {
-    let numbers = text.split(/\n/g);
-    numbers.splice(-1, 1);
-    numbers.map(text => isNaN(parseInt(text, 10)) ?
+      .then((response) => {
+        if (!response.ok) {
+          throw new TypeError(`Could not load ${url}`);
+        }
+        return response.text();
+      })
+      .then((text) => {
+        let numbers = text.split(/\n/g);
+        numbers.splice(-1, 1);
+        numbers.map((text) => isNaN(parseInt(text, 10)) ?
         text : parseInt(text + '9', 10))
-    .sort((a, b) => a - b)
-    .map((number, index) => {
-      const li = document.createElement('li');
-      li.textContent = /\d+/.test(number) ?
+            .sort((a, b) => a - b)
+            .map((number, index) => {
+              const li = document.createElement('li');
+              li.textContent = /\d+/.test(number) ?
           `From $${number} at Affiliate ${index}` : number;
-      fragment.appendChild(li);
-    });
-    offers.innerHTML = '';
-    offers.appendChild(fragment);
-  })
-  .catch(e => console.error(e));
+              fragment.appendChild(li);
+            });
+        offers.innerHTML = '';
+        offers.appendChild(fragment);
+      })
+      .catch((e) => console.error(e));
 };
 
 const loadReviews = (target) => {
@@ -161,27 +163,27 @@ const loadReviews = (target) => {
   const promises = [];
   for (let i = 0, lenI = Math.floor(Math.random() * 6) + 2; i < lenI; i++) {
     const url = `https://baconipsum.com/api/?type=all-meat&paras=${
-        Math.floor(Math.random() * 3) + 1}&start-with-lorem=1&random=${i}`;
+      Math.floor(Math.random() * 3) + 1}&start-with-lorem=1&random=${i}`;
     promises[i] = fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new TypeError(`Could not load ${url}`)
-      }
-      return response.json();
-    })
-    .then(sentences => `<li>${sentences.map(
-        sentence => `<p>${sentence}</p>`).join('')}</li>`)
-    .catch(e => console.error(e));
+        .then((response) => {
+          if (!response.ok) {
+            throw new TypeError(`Could not load ${url}`);
+          }
+          return response.json();
+        })
+        .then((sentences) => `<li>${sentences.map(
+            (sentence) => `<p>${sentence}</p>`).join('')}</li>`)
+        .catch((e) => console.error(e));
   }
   Promise.all(promises)
-  .then(reviews => reviews.join(''))
-  .then(reviews => {
-    const ul = document.createElement('ul');
-    ul.innerHTML = reviews;
-    fragment.appendChild(ul);
-    target.innerHTML = '';
-    target.appendChild(fragment);
-  });
+      .then((reviews) => reviews.join(''))
+      .then((reviews) => {
+        const ul = document.createElement('ul');
+        ul.innerHTML = reviews;
+        fragment.appendChild(ul);
+        target.innerHTML = '';
+        target.appendChild(fragment);
+      });
 };
 
 const loadPhotos = (target) => {
@@ -195,32 +197,34 @@ const loadPhotos = (target) => {
     const height = (Math.floor(Math.random() * 5) + 10) * 10;
     const url = `https://placekitten.com/${width}/${height}?random=${i}`;
     promises[i] = fetch(url)
-    .then(response => {
-      if (!response.ok) {
-        throw new TypeError(`Could not load ${url}`)
-      }
-      return response.blob();
-    })
-    .then(blob => {return {width, height, blob}});
+        .then((response) => {
+          if (!response.ok) {
+            throw new TypeError(`Could not load ${url}`);
+          }
+          return response.blob();
+        })
+        .then((blob) => {
+          return {width, height, blob};
+        });
   }
   Promise.all(promises)
-  .then(responseObjects => {
-    responseObjects.forEach(responseObject => {
-      const img = new Image(responseObject.width, responseObject.height);
-      img.src = URL.createObjectURL(responseObject.blob);
-      gallery.appendChild(img);
-    });
-    target.innerHTML = '';
-    target.appendChild(fragment);
-  })
-  .catch(e => console.error(e));
+      .then((responseObjects) => {
+        responseObjects.forEach((responseObject) => {
+          const img = new Image(responseObject.width, responseObject.height);
+          img.src = URL.createObjectURL(responseObject.blob);
+          gallery.appendChild(img);
+        });
+        target.innerHTML = '';
+        target.appendChild(fragment);
+      })
+      .catch((e) => console.error(e));
 };
 
 const lazyLoadInit = (root = false) => {
   const things = root ?
         root.querySelectorAll('.lazyload') :
         document.querySelectorAll('.lazyload');
-  things.forEach(thing => {
+  things.forEach((thing) => {
     observer.observe(thing);
   });
 };
@@ -243,17 +247,17 @@ window.addEventListener('online', () => {
 });
 
 const firstTimeSetup = () => {
-  document.querySelector('form').addEventListener('submit', e => {
+  document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
     init();
   });
 
-  for(let i = 0; i < 3; i++) {
+  for (let i = 0; i < 3; i++) {
     const content = template.content;
     const labels = content.querySelectorAll('label');
     content.querySelectorAll('input').forEach((input, index) => {
       const id = Math.random().toString().substr(2);
-      input.name = `tabgroup${i}`
+      input.name = `tabgroup${i}`;
       input.id = id;
       labels[index].setAttribute('for', id);
     });
@@ -271,9 +275,9 @@ const firstTimeSetup = () => {
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js')
-    .then(registration => console.log(
-        `Service worker registered for scope ${registration.scope}`))
-    .catch(e => console.error(e));
+        .then((registration) => console.log(
+            `Service worker registered for scope ${registration.scope}`))
+        .catch((e) => console.error(e));
   }
 };
 
