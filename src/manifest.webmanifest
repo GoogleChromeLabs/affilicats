@@ -1,6 +1,7 @@
 {
   "name": "\uD83D\uDC08 AffiliCats",
   "short_name": "AffiliCats",
+  "start_url": "./",
   "icons": [{
       "src": "./img/cat.png",
       "sizes": "512x512",
