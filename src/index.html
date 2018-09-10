@@ -61,7 +61,7 @@
         background-color: #eee;
         border-radius: .25em;
         padding: 1em;
-        margin: .5em;
+        margin: .25em;
       }
 
       figure img {
@@ -120,7 +120,7 @@
         height: 2em;
         display: block;
         border-radius: .25em;
-        background-color: darkgreen;
+        background-color: #ff9800;
         color: white;
         margin: .5em 0;
         padding-top: .25em;
@@ -129,7 +129,7 @@
       }
 
       .offers {
-        color: maroon;
+        color: #311b92;
         list-style: none;
       }
 
@@ -140,12 +140,13 @@
 
       .price {
         color: transparent;
-        text-shadow: 0 0 0 darkgray;
+        text-shadow: 0 0 0 #607d8b;
       }
 
       .tabs {
         position: relative;
         height: 25em;
+        margin: .25em;
         clear: both;
       }
 
@@ -157,10 +158,11 @@
 
       .tabs .tab {
         float: left;
+        width: 33.333%;
       }
 
       .tabs label {
-        margin-right: 1em;
+        text-align: center;
       }
 
       .tabs .tab .tabcontent {
@@ -182,7 +184,7 @@
       }
 
       .checkboxtab:focus ~ label {
-        outline: blue auto 5px;
+        outline: rgb(229, 151, 0) auto 5px;
         outline: -webkit-focus-ring-color auto 5px;
       }
 
@@ -190,16 +192,23 @@
         display: block;
       }
 
-      .reviews {
-        background-color: red;
-      }
-
-      .location {
-        background-color: orange;
+      .map {
+        object-fit: cover;
+        width: 100%;
+        height: auto;
+        border: solid 1px #eee;
       }
 
       .photos {
-        background-color: yellow;
+        background-color: #2196F3;
+      }
+
+      .reviews {
+        background-color: #03A9F4;
+      }
+
+      .location {
+        background-color: #00bcd4;
       }
 
       .gallery {
