@@ -77,6 +77,7 @@ const renderCats = (data, template, main) => {
     const catContainer = document.importNode(template.content, true);
     // Image
     const img = catContainer.querySelector('figure img');
+    img.alt = `Illustrative ${search.value.toLowerCase()} image`;
     img.classList.add('lazyload');
     img.dataset.src = cat.src;
     // Description
@@ -120,6 +121,7 @@ const renderCats = (data, template, main) => {
         &format=png
         &markers=size:small%7Ccolor:0xfffb00%7C${lat},${long}`
         .replace(/\n\s*/g, '');
+    map.alt = `Map centered on latitude ${lat} and longitude ${long}`;
     tabs.querySelector('.lat').textContent = lat;
     tabs.querySelector('.long').textContent = long;
     fragment.appendChild(catContainer);
@@ -211,6 +213,7 @@ const loadPhotos = (target) => {
       .then((responseObjects) => {
         responseObjects.forEach((responseObject) => {
           const img = new Image(responseObject.width, responseObject.height);
+          img.alt = `Illustrative ${search.value.toLowerCase()} image`;
           img.src = URL.createObjectURL(responseObject.blob);
           gallery.appendChild(img);
         });
