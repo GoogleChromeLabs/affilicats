@@ -289,12 +289,13 @@ const firstTimeSetup = () => {
 
 const cachePolyfills = async () => {
   const fetchAndCache = async (url) => {
-    return fetch(url)
+    const request = new Request(url, {mode: 'no-cors'});
+    return fetch(request)
         .then((response) => {
           if (!response.ok) {
             throw new TypeError('Bad response status');
           }
-          return cache.put(url, response);
+          return cache.put(request, response);
         });
   };
 
