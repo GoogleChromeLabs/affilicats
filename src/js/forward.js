@@ -5,12 +5,14 @@ const seconds = document.getElementById('seconds');
 seconds.textContent = REDIRECT_TIMEOUT;
 const forwardLink = document.getElementById('forward');
 
+const online = navigator.onLine;
+
 const Timer = function(callback, delay) {
   let remaining = delay;
   let timerId;
   let start;
 
-  this.running = true;
+  this.running = false;
 
   this.counter = 0;
 
@@ -34,7 +36,9 @@ const Timer = function(callback, delay) {
     }
   }, 1000);
 
-  this.resume();
+  if (online) {
+    this.resume();
+  }
 };
 
 const params = new URLSearchParams(document.location.search);
@@ -46,7 +50,6 @@ const timer = new Timer(() => {
   document.location.href = url;
 }, REDIRECT_TIMEOUT * 1000);
 
-const online = navigator.onLine;
 offline.hidden = online;
 if (online) {
   hourglass.classList.add('spin');
