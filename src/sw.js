@@ -1,4 +1,4 @@
-const VERSION = 1536593116317;
+const VERSION = 1536593116318;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -39,15 +39,15 @@ self.addEventListener('activate', (activateEvent) => {
 });
 
 self.addEventListener('fetch', (fetchEvent) => {
-  const cacheOnly = async (request, options = {}) => {
+  const cacheWithNetworkFallback = async (request, options = {}) => {
     const cache = await caches.open(OFFLINE_CACHE);
-    return cache.match(request, options);
+    return cache.match(request, options) || fetch(request);
   };
 
   const networkWithTimeout = async (request, destination, url) => {
     const waitPromise = new Promise((resolve) => setTimeout(() => {
       if (destination === 'image') {
-        return resolve(cacheOnly(TIMEOUT_IMG_URL));
+        return resolve(cacheWithNetworkFallback(TIMEOUT_IMG_URL));
       }
       if (!destination) {
         if (url.origin === 'https://commons.wikimedia.org') {
@@ -69,7 +69,7 @@ self.addEventListener('fetch', (fetchEvent) => {
           return resolve(new Response(blob));
         }
         if (url.origin === 'https://placekitten.com') {
-          return resolve(cacheOnly(TIMEOUT_IMG_URL));
+          return resolve(cacheWithNetworkFallback(TIMEOUT_IMG_URL));
         }
       }
     }, TIMEOUT));
@@ -84,7 +84,7 @@ self.addEventListener('fetch', (fetchEvent) => {
         })
         .catch((e) => {
           if (destination === 'image') {
-            return cacheOnly(OFFLINE_IMG_URL);
+            return cacheWithNetworkFallback(OFFLINE_IMG_URL);
           }
           if (!destination) {
             if (url.origin === 'https://commons.wikimedia.org') {
@@ -106,7 +106,7 @@ self.addEventListener('fetch', (fetchEvent) => {
               return new Response(blob);
             }
             if (url.origin === 'https://placekitten.com') {
-              return cacheOnly(OFFLINE_IMG_URL);
+              return cacheWithNetworkFallback(OFFLINE_IMG_URL);
             }
           }
           return new Response();
@@ -120,7 +120,7 @@ self.addEventListener('fetch', (fetchEvent) => {
   fetchEvent.respondWith((async () => {
     const request = fetchEvent.request;
     if (request.mode === 'navigate') {
-      return cacheOnly(request, {ignoreSearch: true});
+      return cacheWithNetworkFallback(request, {ignoreSearch: true});
     }
     const destination = request.destination;
     const url = new URL(request.url);
@@ -129,11 +129,11 @@ self.addEventListener('fetch', (fetchEvent) => {
     }
     if (destination) {
       if (destination === 'script') {
-        return cacheOnly(request);
+        return cacheWithNetworkFallback(request);
       }
       if (destination === 'image') {
         if (STATIC_FILES.includes(request.url)) {
-          return cacheOnly(request);
+          return cacheWithNetworkFallback(request);
         }
         return networkWithTimeout(request, destination, url);
       }

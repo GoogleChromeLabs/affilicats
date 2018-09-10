@@ -289,12 +289,8 @@ const firstTimeSetup = () => {
 
 const cachePolyfills = async () => {
   const keys = await caches.keys();
-  console.log(keys);
   const cache = await caches.open(keys.filter(
       (key) => /^offline_/.test(key))[0]);
-  console.log(keys.filter(
-      (key) => /^offline_/.test(key))[0]);
-  console.log(cache);
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (localStorage.getItem(key) === 'polyfill') {
