@@ -1,3 +1,4 @@
+const DEFAULT_SEARCH = 'Felis silvestris catus';
 const offline = document.querySelector('.offline');
 const main = document.querySelector('main');
 const search = document.querySelector('input');
@@ -41,7 +42,7 @@ const getCats = async (query) => {
       &gcmtype=file
       &gcmtitle=Category:${encodeURIComponent(query.replace(/\s/g, ' '))}
       &prop=imageinfo
-      &iiurlheight=100
+      &iiurlwidth=500
       &iiprop=extmetadata|url
       &iiextmetadatafilter=ImageDescription
       &format=json&origin=*`.replace(/\n\s*/g, '');
@@ -53,6 +54,9 @@ const getCats = async (query) => {
         return response.json();
       })
       .then((data) => {
+        if (!data || !data.query || !data.query.pages) {
+          return;
+        }
         return Object.keys(data.query.pages).map((key) => {
           let entry = data.query.pages[key];
           try {
@@ -195,8 +199,8 @@ const loadPhotos = (target) => {
   fragment.appendChild(gallery);
   const promises = [];
   for (let i = 0, lenI = Math.floor(Math.random() * 15) + 2; i < lenI; i++) {
-    const width = (Math.floor(Math.random() * 10) + 10) * 10;
-    const height = (Math.floor(Math.random() * 5) + 10) * 10;
+    const width = (Math.floor(Math.random() * 10) + 20) * 10;
+    const height = (Math.floor(Math.random() * 5) + 20) * 10;
     const url = `https://placekitten.com/${width}/${height}?random=${i}`;
     promises[i] = fetch(url)
         .then((response) => {
@@ -322,11 +326,32 @@ const cachePolyfills = async () => {
 
 const init = async () => {
   // Get real content
-  const query = search.value || 'Felis_silvestris_catus';
+  const params = new URLSearchParams(document.location.search);
+  const prevSearch = params.get('query');
+  if (prevSearch && !search.value) {
+    search.value = prevSearch;
+  }
+  if (!prevSearch && !search.value) {
+    search.value = DEFAULT_SEARCH;
+  }
+  const query = search.value || DEFAULT_SEARCH;
   const cats = await getCats(query);
-  if (cats && cats.length) {
+  if (Array.isArray(cats) && cats.length > 0) {
     main.dataset.hydrated = 'true';
+    if (query !== DEFAULT_SEARCH) {
+      history.pushState(
+          {},
+          '',
+          `${document.location.origin}${document.location.pathname}?query=${
+            encodeURIComponent(query)}`);
+    }
     renderCats(cats, template, main);
+  } else {
+    main.innerHTML = `<p>😥 No results found.</p>
+        <p>Try anything that is a
+        <a href="https://commons.wikimedia.org/wiki/Category:Topics">
+        Wikimedia Categorie</a>. Maybe try
+        <a href="./?query=Elephants">Elephants</a> 🐘</p>`;
   }
   lazyLoadInit();
 };

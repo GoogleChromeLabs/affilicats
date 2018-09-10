@@ -30,6 +30,8 @@
           throw {};
         }
       } catch (e) {
+        window.URLSearchParams = void 0;
+        document.write('<script src="https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js"><\/script>');
         localStorage.setItem('URLSearchParams', 'polyfill');
       }
     </script>
@@ -47,14 +49,23 @@
 
       body {
         font-size: 14pt;
-        font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
+        font-family: "Helvetica Neue", helvetica, arial, sans-serif;
         margin: .5em;
         max-width: 500px;
+      }
+
+      header > a {
+        text-decoration: none;
+      }
+
+      header > p {
+        margin: 0 .25em;
       }
 
       h1 {
         font-style: italic;
         color: #373fff;
+        margin: 0 .25em;
       }
 
       figure {
@@ -250,14 +261,14 @@
   </head>
   <body>
     <header>
-      <h1>🐈 AffiliCats</h1>
+      <a href="./"><h1>🐈 AffiliCats</h1></a>
       <p>
         Find the cutest cats online!
       </p>
     </header>
     <div class="search">
       <form>
-        <input type="search" value="Felis silvestris catus" aria-label="search through site content">
+        <input type="search" value="" aria-label="search through site content">
         <button type="submit" value="Search">Go</button>
       </form>
     </div>

@@ -1,4 +1,4 @@
-const VERSION = 1536607322590;
+const VERSION = 1536612507507;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -125,7 +125,7 @@ self.addEventListener('fetch', (fetchEvent) => {
     const destination = request.destination;
     const url = new URL(request.url);
     if (url.protocol === 'chrome-extension:') {
-      return new Response();
+      return fetch(url);
     }
     if (destination) {
       if (destination === 'script') {
