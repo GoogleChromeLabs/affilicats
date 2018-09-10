@@ -115,7 +115,7 @@ const renderCats = (data, template, main) => {
         Math.random() * 180 * 100000) / 100000;
     map.dataset.src = `https://maps.googleapis.com/maps/api/staticmap
         ?autoscale=1
-        &size=500x400
+        &size=500x350
         &maptype=terrain
         &key=AIzaSyBWZnCRi6oar3MTjR0HkR1lK52_mTe0Rks
         &format=png
