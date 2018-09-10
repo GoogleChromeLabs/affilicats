@@ -15,6 +15,7 @@
       try {
         if (new URLSearchParams('q=%2B').get('q') !== '+') {
           throw {};
+        }
       } catch (e) {
         window.URLSearchParams = void 0;
         document.write('<script src="https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js"><\/script>');

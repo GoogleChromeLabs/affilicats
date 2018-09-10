@@ -278,9 +278,38 @@ const firstTimeSetup = () => {
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
-        .then((registration) => console.log(
-            `Service worker registered for scope ${registration.scope}`))
+        .then((registration) => {
+          console.log(`Service worker registered for scope ${
+            registration.scope}`);
+          registration.onupdatefound = cachePolyfills;
+        })
         .catch((e) => console.error(e));
+  }
+};
+
+const cachePolyfills = async () => {
+  const keys = await caches.keys();
+  console.log(keys);
+  const cache = await caches.open(keys.filter(
+      (key) => /^offline_/.test(key))[0]);
+  console.log(keys.filter(
+      (key) => /^offline_/.test(key))[0]);
+  console.log(cache);
+  for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (localStorage.getItem(key) === 'polyfill') {
+      switch (key) {
+        case 'IntersectionObserver':
+          cache.add('https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js');
+          break;
+        case 'PWACompat':
+          cache.add('https://cdn.jsdelivr.net/npm/pwacompat@2.0.7/pwacompat.min.js');
+          break;
+        case 'URLSearchParams':
+          cache.add('https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js');
+          break;
+      }
+    };
   }
 };
 
