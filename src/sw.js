@@ -1,4 +1,4 @@
-const VERSION = 1535985208500;
+const VERSION = 1536562494715;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 3000;
@@ -9,7 +9,8 @@ const STATIC_FILES = [
   './',
   './index.html',
   './forward.html',
-  './js/client.js',
+  './js/main.js',
+  './js/forward.js',
   './img/cat.png',
   './img/map.svg',
   OFFLINE_IMG_URL,
