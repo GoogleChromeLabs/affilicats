@@ -1,4 +1,4 @@
-const VERSION = 1536593116318;
+const VERSION = 1536593116319;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
