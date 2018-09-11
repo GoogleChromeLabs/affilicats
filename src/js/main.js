@@ -263,9 +263,6 @@ const firstTimeSetup = () => {
 
   window.addEventListener('beforeinstallprompt', (event) => {
     event.preventDefault();
-    console.log('🐞');
-    console.log(event);
-    console.log('🐞');
     installPromptEvent = event;
     install.disabled = false;
     install.hidden = false;
