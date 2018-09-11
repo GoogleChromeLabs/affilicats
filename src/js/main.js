@@ -301,7 +301,8 @@ const cachePolyfills = async () => {
             throw new TypeError('Bad response status');
           }
           return cache.put(request, response);
-        });
+        })
+        .catch((e) => console.error(e));
   };
 
   const keys = await caches.keys();
@@ -315,7 +316,7 @@ const cachePolyfills = async () => {
           fetchAndCache('https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js');
           break;
         case 'PWACompat':
-          fetchAndCache('https://cdn.jsdelivr.net/npm/pwacompat@2.0.7/pwacompat.min.js');
+          fetchAndCache('https://unpkg.com/pwacompat@2.0.7/pwacompat.min.js');
           break;
         case 'URLSearchParams':
           fetchAndCache('https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js');

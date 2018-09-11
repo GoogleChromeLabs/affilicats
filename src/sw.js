@@ -1,4 +1,4 @@
-const VERSION = 1536649462449;
+const VERSION = 1536650691186;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -130,7 +130,7 @@ self.addEventListener('fetch', (fetchEvent) => {
     }
     if (destination) {
       if (destination === 'script') {
-        return cacheWithNetworkFallback(request, {}, {mode: 'no-cors'});
+        return cacheWithNetworkFallback(request);
       }
       if (destination === 'image') {
         if (STATIC_FILES.includes(request.url)) {
@@ -138,6 +138,9 @@ self.addEventListener('fetch', (fetchEvent) => {
         }
         return networkWithTimeout(request, destination, url);
       }
+    }
+    if (url.origin === 'https://unpkg.com') {
+      return cacheWithNetworkFallback(request, {}, {mode: 'no-cors'});
     }
     return networkWithTimeout(request, destination, url);
   })());
