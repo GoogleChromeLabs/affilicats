@@ -32,7 +32,9 @@ const Timer = function(callback, delay) {
   window.setInterval(() => {
     if (this.running) {
       this.counter++;
-      seconds.textContent = REDIRECT_TIMEOUT - this.counter;
+      seconds.textContent = REDIRECT_TIMEOUT - this.counter >= 0 ?
+          REDIRECT_TIMEOUT - this.counter :
+          '0';
     }
   }, 1000);
 
