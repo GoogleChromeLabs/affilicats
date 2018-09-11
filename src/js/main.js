@@ -286,6 +286,7 @@ const firstTimeSetup = () => {
           console.log(`Service worker registered for scope ${
             registration.scope}`);
           registration.onupdatefound = cachePolyfills;
+          cachePolyfills();
         })
         .catch((e) => console.error(e));
   }

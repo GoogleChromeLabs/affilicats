@@ -1,4 +1,4 @@
-const VERSION = 1536613540942;
+const VERSION = 1536649462449;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -39,10 +39,11 @@ self.addEventListener('activate', (activateEvent) => {
 });
 
 self.addEventListener('fetch', (fetchEvent) => {
-  const cacheWithNetworkFallback = async (request, options = {}) => {
-    const cache = await caches.open(OFFLINE_CACHE);
-    return cache.match(request, options) || fetch(request);
-  };
+  const cacheWithNetworkFallback =
+      async (request, matchOpt = {}, fetchOpt = {}) => {
+        const cache = await caches.open(OFFLINE_CACHE);
+        return cache.match(request, matchOpt) || fetch(request, fetchOpt);
+      };
 
   const networkWithTimeout = async (request, destination, url) => {
     const waitPromise = new Promise((resolve) => setTimeout(() => {
@@ -129,7 +130,7 @@ self.addEventListener('fetch', (fetchEvent) => {
     }
     if (destination) {
       if (destination === 'script') {
-        return cacheWithNetworkFallback(request);
+        return cacheWithNetworkFallback(request, {}, {mode: 'no-cors'});
       }
       if (destination === 'image') {
         if (STATIC_FILES.includes(request.url)) {
