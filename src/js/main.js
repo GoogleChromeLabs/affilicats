@@ -297,9 +297,6 @@ const cachePolyfills = async () => {
     const request = new Request(url, {mode: 'no-cors'});
     return fetch(request)
         .then((response) => {
-          if (!response.ok) {
-            throw new TypeError('Bad response status');
-          }
           return cache.put(request, response);
         })
         .catch((e) => console.error(e));
