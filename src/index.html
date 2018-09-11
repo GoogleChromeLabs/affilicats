@@ -121,8 +121,14 @@
         border-radius: .25em;
         position: absolute;
         top: 1em;
+        right: .5em;
         width: 5em;
-        left: calc(500px - 4.5em);
+      }
+
+      @media (min-width: calc(500px - 5em)) {
+        .install {
+          left: calc(500px - 4.5em);
+        }
       }
 
       .container {
