@@ -1,4 +1,4 @@
-const VERSION = 1536652285906;
+const VERSION = 1536652285907;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -131,6 +131,9 @@ self.addEventListener('fetch', (fetchEvent) => {
     }
     if (destination) {
       if (destination === 'script') {
+        if (url.origin === 'https://unpkg.com') {
+          return cacheWithNetworkFallback(request, {}, {mode: 'no-cors'});
+        }
         return cacheWithNetworkFallback(request);
       }
       if (destination === 'image') {

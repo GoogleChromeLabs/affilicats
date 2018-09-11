@@ -18,11 +18,11 @@
         location.protocol = 'https:';
       }
       if (!('IntersectionObserver' in window)) {
-        document.write('<script src="https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js" crossorigin="anonymous"><\/script>');
+        document.write('<script src="https://unpkg.com/intersection-observer@0.5.0/intersection-observer.js"><\/script>');
         localStorage.setItem('IntersectionObserver', 'polyfill');
       }
       if (!!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform)) {
-        document.write('<script async src="https://unpkg.com/pwacompat@2.0.7/pwacompat.min.js" crossorigin="anonymous"><\/script>');
+        document.write('<script async src="https://unpkg.com/pwacompat@2.0.7/pwacompat.min.js"><\/script>');
         localStorage.setItem('PWACompat', 'polyfill');
       }
       try {
@@ -31,7 +31,7 @@
         }
       } catch (e) {
         window.URLSearchParams = void 0;
-        document.write('<script src="https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js" crossorigin="anonymous"><\/script>');
+        document.write('<script src="https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js"><\/script>');
         localStorage.setItem('URLSearchParams', 'polyfill');
       }
     </script>
