@@ -1,4 +1,4 @@
-const VERSION = 1536650691186;
+const VERSION = 1536652285905;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -42,7 +42,8 @@ self.addEventListener('fetch', (fetchEvent) => {
   const cacheWithNetworkFallback =
       async (request, matchOpt = {}, fetchOpt = {}) => {
         const cache = await caches.open(OFFLINE_CACHE);
-        return cache.match(request, matchOpt) || fetch(request, fetchOpt);
+        const match = await cache.match(request, matchOpt);
+        return match || fetch(request, fetchOpt);
       };
 
   const networkWithTimeout = async (request, destination, url) => {

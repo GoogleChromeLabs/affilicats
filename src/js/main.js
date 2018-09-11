@@ -302,7 +302,7 @@ const cachePolyfills = async () => {
           }
           return cache.put(request, response);
         })
-        .catch((e) => console.error(e));
+        .catch((e) => console.error(e, request, response));
   };
 
   const keys = await caches.keys();

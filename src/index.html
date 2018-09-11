@@ -14,7 +14,7 @@
     <title>🐈 AffiliCats — Find the cutest cats online!</title>
 
     <script>
-      if (!location.protocol === 'https:') {
+      if (location.protocol !== 'https:') {
         location.protocol = 'https:';
       }
       if (!('IntersectionObserver' in window)) {

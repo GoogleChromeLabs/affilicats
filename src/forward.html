@@ -12,6 +12,9 @@
     <title>🐈 AffiliCats — Find the cutest cats online!</title>
 
     <script>
+      if (location.protocol !== 'https:') {
+        location.protocol = 'https:';
+      }
       try {
         if (new URLSearchParams('q=%2B').get('q') !== '+') {
           throw {};
