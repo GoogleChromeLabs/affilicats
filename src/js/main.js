@@ -4,6 +4,8 @@ const main = document.querySelector('main');
 const search = document.querySelector('input');
 const button = document.querySelector('button');
 const template = document.getElementById('cat');
+const install = document.querySelector('.install');
+let installPromptEvent;
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -257,6 +259,30 @@ const firstTimeSetup = () => {
   document.querySelector('form').addEventListener('submit', (e) => {
     e.preventDefault();
     init();
+  });
+
+  window.addEventListener('beforeinstallprompt', (event) => {
+    event.preventDefault();
+    console.log('🐞');
+    console.log(event);
+    console.log('🐞');
+    installPromptEvent = event;
+    install.disabled = false;
+    install.hidden = false;
+  });
+
+  install.addEventListener('click', () => {
+    install.disabled = true;
+    install.hidden = true;
+    installPromptEvent.prompt();
+    installPromptEvent.userChoice.then((choice) => {
+      if (choice.outcome === 'accepted') {
+        console.log('User accepted the A2HS prompt');
+      } else {
+        console.log('User dismissed the A2HS prompt');
+      }
+      installPromptEvent = null;
+    });
   });
 
   for (let i = 0; i < 3; i++) {
