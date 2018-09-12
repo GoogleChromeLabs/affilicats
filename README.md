@@ -12,7 +12,7 @@ where the conversion action is to click through to a third-party and place the a
 Play with the app at
 👉 [tomayac.github.io/affilicats](https://tomayac.github.io/affilicats/) 👈. 
 
-<img alt="Screenshot of the AffiliCats app" src="https://github.com/tomayac/affilicats/blob/master/screenshot.png" width="320">
+<img alt="Screenshot of the AffiliCats app" src="https://github.com/tomayac/affilicats/assets/blob/master/screenshot.png" width="320">
  
 ## Developing and Building
 
