@@ -107,11 +107,13 @@ const renderCats = (data, template, main) => {
       lazyLoadInit(tabs);
     });
     const labels = tabs.querySelectorAll('label');
+    const tabContents = tabs.querySelectorAll('.tabcontent');
     tabs.querySelectorAll('input').forEach((input, i) => {
       const id = Math.random().toString().substr(2);
       input.name = `tabgroup${index}`;
       input.id = id;
       labels[i].setAttribute('for', id);
+      tabContents[i].setAttribute('aria-labelledby', id);
     });
     // Map
     const map = tabs.querySelector('.map');
@@ -285,11 +287,13 @@ const firstTimeSetup = () => {
   for (let i = 0; i < 3; i++) {
     const content = template.content;
     const labels = content.querySelectorAll('label');
+    const tabContents = content.querySelectorAll('.tabcontent');
     content.querySelectorAll('input').forEach((input, index) => {
       const id = Math.random().toString().substr(2);
       input.name = `tabgroup${i}`;
       input.id = id;
       labels[index].setAttribute('for', id);
+      tabContents[index].setAttribute('aria-labelledby', id);
     });
     main.appendChild(document.importNode(content, true));
   }
