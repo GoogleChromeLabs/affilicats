@@ -10,8 +10,15 @@
     <link rel="icon" href="./img/cat.png">
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="preload" href="./img/cat.svg" as="image">
+    <link rel="preload" href="./js/main.js" as="script">
+    <link rel="preconnect" href="https://commons.wikimedia.org/" crossorigin>
+    <link rel="preconnect" href="https://upload.wikimedia.org/" crossorigin>
+    <link rel="preconnect" href="https://www.random.org/" crossorigin>
+    <link rel="preconnect" href="https://placekitten.com/" crossorigin>
+    <link rel="preconnect" href="https://baconipsum.com/" crossorigin>
+    <link rel="preconnect" href="https://maps.googleapis.com/" crossorigin>
 
-    <title>🐈 AffiliCats — Find the cutest cats online!</title>
+    <title>AffiliCats — Find the cutest cats online!</title>
 
     <script>
       if (location.hostname !== 'localhost' && location.protocol !== 'https:') {
@@ -41,6 +48,8 @@
     <style>
       html {
         box-sizing: border-box;
+        display: flex;
+        justify-content: center;
       }
 
       *, *:before, *:after {
@@ -52,6 +61,10 @@
         font-family: "Helvetica Neue", helvetica, arial, sans-serif;
         margin: .5em;
         max-width: 500px;
+      }
+
+      header {
+        position: relative;
       }
 
       header > a {
@@ -66,6 +79,10 @@
         font-style: italic;
         color: #373fff;
         margin: 0 .25em;
+      }
+
+      ul {
+        padding-inline-start: 2em;
       }
 
       figure {
@@ -121,14 +138,8 @@
         border-radius: .25em;
         position: absolute;
         top: 1em;
-        right: .5em;
+        right: 0;
         width: 5em;
-      }
-
-      @media (min-width: calc(500px - 5em)) {
-        .install {
-          left: calc(500px - 4.5em);
-        }
       }
 
       .container {
@@ -144,13 +155,12 @@
 
       .outlink {
         width: 90%;
-        height: 2em;
-        display: block;
+        border: solid 1px #E65100;
         border-radius: .25em;
         background-color: #ff9800;
         color: #263238;
         margin: .5em 0;
-        padding-top: .25em;
+        padding: .25em;
         text-align: center;
         text-decoration: none;
       }
@@ -170,6 +180,21 @@
         text-shadow: 0 0 0 #607d8b;
       }
 
+      .pricedrop {
+        padding-inline-start: 2em;
+      }
+
+      .pricedrop label {
+        border: 1px #361594 solid;
+        border-radius: .25em;
+        padding: .25em;
+      }
+
+      .pricedrop input {
+        position: absolute;
+        opacity: 0;
+      }
+
       .tabs {
         position: relative;
         height: 25em;
@@ -186,9 +211,6 @@
       .tabs .tab {
         float: left;
         width: 33.333%;
-      }
-
-      .tabs label {
         text-align: center;
       }
 
@@ -208,6 +230,7 @@
 
       .checkboxtab {
         opacity: 0;
+        position: absolute;
       }
 
       .checkboxtab:focus ~ label {
@@ -253,7 +276,7 @@
         object-fit: cover;
       }
 
-      @media (min-width: 320px) {
+      @media (min-width: 321px) {
         .gallery img:first-child {
           grid-area: 1 / 1 / span 2 / span 2;
         }
@@ -275,11 +298,11 @@
   </head>
   <body>
     <header>
+      <button disabled hidden class="install">📲 Install</button>
       <a href="./"><h1>🐈 AffiliCats</h1></a>
       <p>
         Find the cutest cats online!
       </p>
-      <button disabled hidden class="install">📲 Install</button>
     </header>
     <div class="search">
       <form>
@@ -301,6 +324,13 @@
           <ul class="offers lazyload">
             <li>⏳ Loading offers…</li>
           </ul>
+          <div class="pricedrop">
+            <label>
+              🛎 Price Drop Alerts
+              <span hidden>✅ Active</span>
+              <input type="checkbox" data-active="true">
+            </label>
+          </div>
         </div>
         <ul>
           <li class="stars">Cuteness rating: ⏳</li>

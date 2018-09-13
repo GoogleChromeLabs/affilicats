@@ -1,11 +1,16 @@
 const DEFAULT_SEARCH = 'Felis silvestris catus';
+// eslint-disable-next-line max-len
+const VAPID_PUBLIC_KEY = 'BHuCD9Ym4yXI9Fk0KHrRcPgH2iQOXhoWbzWtm4GQocD1zGYz4IXyazINE_-T4pEojrAgqoGoRnxUgX5CAuguRGo';
+
 const offline = document.querySelector('.offline');
 const main = document.querySelector('main');
-const search = document.querySelector('input');
+const search = document.querySelector('input[type="search"]');
 const button = document.querySelector('button');
 const template = document.getElementById('cat');
 const install = document.querySelector('.install');
+
 let installPromptEvent;
+let registration;
 
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -78,6 +83,7 @@ const getCats = async (query) => {
 };
 
 const renderCats = (data, template, main) => {
+  const pushSupported = registration && 'pushManager' in registration;
   const fragment = document.createDocumentFragment();
   data.forEach((cat, index) => {
     const catContainer = document.importNode(template.content, true);
@@ -90,7 +96,29 @@ const renderCats = (data, template, main) => {
     const figcaption = catContainer.querySelector('figcaption');
     figcaption.textContent =
         (figcaption.innerHTML = cat.description, figcaption.textContent);
+    if (/took too long to load/.test(cat.description)) {
+      return;
+    }
     // Metadata
+    const priceDrop = catContainer.querySelector('.pricedrop');
+    if (pushSupported) {
+      priceDrop.querySelector('input').addEventListener('input', (e) => {
+        const input = e.target;
+        if (input.checked) {
+          const label = input.parentNode;
+          label.innerHTML = label.innerHTML.replace('🛎', '⏳');
+          (async () => {
+            const pushSucceeded = await pushNotifications();
+            input.disabled = pushSucceeded;
+            input.dataset.active = 'false';
+            label.innerHTML = label.innerHTML.replace('⏳', '🛎');
+            priceDrop.querySelector('span').hidden = !pushSucceeded;
+          })();
+        }
+      });
+    } else {
+      priceDrop.hidden = true;
+    }
     const stars = catContainer.querySelector('.stars');
     stars.textContent = `Cuteness rating: ${'😻'.repeat(Math.floor(
         Math.random() * 5) + 1)}`;
@@ -106,9 +134,9 @@ const renderCats = (data, template, main) => {
     tabs.addEventListener('click', () => {
       lazyLoadInit(tabs);
     });
-    const labels = tabs.querySelectorAll('label');
+    const labels = tabs.querySelectorAll('.tab label');
     const tabContents = tabs.querySelectorAll('.tabcontent');
-    tabs.querySelectorAll('input').forEach((input, i) => {
+    tabs.querySelectorAll('.tab input').forEach((input, i) => {
       const id = Math.random().toString().substr(2);
       input.name = `tabgroup${index}`;
       input.id = id;
@@ -244,13 +272,18 @@ window.addEventListener('offline', () => {
   offline.hidden = false;
   search.disabled = true;
   button.disabled = true;
+  document.querySelectorAll('input[data-active="true"]').forEach((input) => {
+    input.disabled = true;
+  });
 });
 
 window.addEventListener('online', () => {
   offline.hidden = true;
   search.disabled = false;
   button.disabled = false;
-
+  document.querySelectorAll('input[data-active="true"]').forEach((input) => {
+    input.disabled = false;
+  });
   if (main.dataset.hydrated === 'false') {
     init();
   }
@@ -286,9 +319,9 @@ const firstTimeSetup = () => {
 
   for (let i = 0; i < 3; i++) {
     const content = template.content;
-    const labels = content.querySelectorAll('label');
+    const labels = content.querySelectorAll('.tab label');
     const tabContents = content.querySelectorAll('.tabcontent');
-    content.querySelectorAll('input').forEach((input, index) => {
+    content.querySelectorAll('.tab input').forEach((input, index) => {
       const id = Math.random().toString().substr(2);
       input.name = `tabgroup${i}`;
       input.id = id;
@@ -309,14 +342,73 @@ const firstTimeSetup = () => {
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
-        .then((registration) => {
-          console.log(`Service worker registered for scope ${
-            registration.scope}`);
+        .then((registration_) => {
+          registration = registration_;
           registration.onupdatefound = cachePolyfills;
           cachePolyfills();
         })
         .catch((e) => console.error(e));
   }
+};
+
+const pushNotifications = async () => {
+  if (!registration || !('pushManager' in registration)) {
+    return false;
+  }
+  const urlBase64ToUint8Array = (base64String) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  };
+
+  return registration.pushManager.getSubscription()
+      .then((subscription) => {
+        if (subscription) {
+          return subscription;
+        }
+
+        const convertedVapidKey = urlBase64ToUint8Array(VAPID_PUBLIC_KEY);
+        return registration.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: convertedVapidKey,
+        });
+      })
+      .then((subscription) => {
+        fetch('https://affilicats-push.glitch.me/push/sendNotification', {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            subscription: subscription,
+            delay: 5,
+            ttl: 0,
+          }),
+        });
+        return fetch('https://affilicats-push.glitch.me/push/register', {
+          method: 'post',
+          headers: {
+            'content-type': 'application/json',
+          },
+          body: JSON.stringify({
+            subscription: subscription,
+          }),
+        })
+            .then((response) => response.ok);
+      })
+      .catch((e) => {
+        console.error(e);
+        return false;
+      });
 };
 
 const cachePolyfills = async () => {

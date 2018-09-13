@@ -1,4 +1,4 @@
-const VERSION = 1536743330428;
+const VERSION = 1536840759672;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -54,7 +54,25 @@ self.addEventListener('fetch', (fetchEvent) => {
       if (!destination) {
         if (url.origin === 'https://commons.wikimedia.org') {
           const blob = new Blob(
-              [JSON.stringify({query: {pages: {}}})],
+              [JSON.stringify({
+                query: {
+                  pages: {
+                    '1': {
+                      'imageinfo': [{
+                        'thumburl': TIMEOUT_IMG_URL,
+                        'thumbwidth': 15,
+                        'thumbheight': 15,
+                        'descriptionshorturl': '#',
+                        'extmetadata': {
+                          'ImageDescription': {
+                            'value': 'Results took too long to load…',
+                          },
+                        },
+                      }],
+                    },
+                  },
+                },
+              })],
               {type: 'application/json'});
           return resolve(new Response(blob));
         }
@@ -148,4 +166,31 @@ self.addEventListener('fetch', (fetchEvent) => {
     }
     return networkWithTimeout(request, destination, url);
   })());
+});
+
+self.addEventListener('push', async (pushEvent) => {
+  pushEvent.waitUntil(
+      self.registration.showNotification('🐈 AffiliCats Price Drop Alert 🚨', {
+        body: 'Prices for cats are going down! 📉',
+        icon: './img/cat.png',
+      })
+  );
+});
+
+self.addEventListener('notificationclick', (clickEvent) => {
+  clickEvent.notification.close();
+  clickEvent.waitUntil(clients.matchAll({
+    type: 'window',
+  }).
+      then((clientList) => {
+        for (const i = 0; i < clientList.length; i++) {
+          const client = clientList[i];
+          if (client.url === self.registration.scope && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        if (clients.openWindow) {
+          return clients.openWindow(self.registration.scope);
+        }
+      }));
 });
