@@ -206,26 +206,9 @@
         padding: 1em 0;
         border-top-left-radius: 1em;
         border-top-right-radius: 1em;
-      }
-
-      .tabs .tab {
+        text-align: center;
         float: left;
         width: 33.333%;
-        text-align: center;
-      }
-
-      .tabs .tab .tabcontent {
-        position: absolute;
-        left: 0;
-        width: 100%;
-      }
-
-      .tabcontent {
-        display: none;
-        height: 22em;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-        padding: .25em;
       }
 
       .checkboxtab {
@@ -236,6 +219,18 @@
       .checkboxtab:focus ~ label {
         outline: rgb(229, 151, 0) auto 5px;
         outline: -webkit-focus-ring-color auto 5px;
+      }
+
+      .tabcontent {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        display: none;
+        height: 22em;
+        text-align: left;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        padding: .25em;
       }
 
       .checkboxtab:checked ~ .tabcontent {
