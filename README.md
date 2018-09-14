@@ -40,6 +40,10 @@ You can build to there by running `npm run build`.
 - **Use an ultra slow network:**
   You should see timeout placeholders (a little clock icon) and info text for timed-out requests.
 
+## Acknowledgements
+
+Thanks to @jeffposnick for the thorough review of the app's service worker code.
+
 ## License
 
 Copyright 2018 Thomas Steiner. All rights reserved.
