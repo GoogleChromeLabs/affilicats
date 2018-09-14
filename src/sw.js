@@ -1,4 +1,4 @@
-const VERSION = 1536926075671;
+const VERSION = 1536929423310;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -106,8 +106,10 @@ self.addEventListener('fetch', (fetchEvent) => {
   const cacheWithNetworkFallback = async (requestOrURL, matchOpt = {},
     fetchOpt = {}) => {
     const cache = await caches.open(OFFLINE_CACHE);
-    const match = await cache.match(requestOrURL, matchOpt);
-    return match || networkWithTimeout(requestOrURL, fetchOpt);
+    const request = requestOrURL instanceof Request ?
+        requestOrURL : new Request(requestOrURL);
+    const match = await cache.match(request, matchOpt);
+    return match || networkWithTimeout(request, fetchOpt);
   };
 
   // Strategy 2: network, falling back to timeout content
