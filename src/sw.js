@@ -1,4 +1,4 @@
-const VERSION = 1536924859673;
+const VERSION = 1536926075670;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -50,7 +50,7 @@ self.addEventListener('install', (installEvent) => {
         'Offers timed out while loading\n',
         {headers: {'content-type': 'text/plain'}}));
     await offlineCache.put('https://baconipsum.com/timeout', new Response(
-        JSON.stringify(['Reviews took too long to load…']),
+        JSON.stringify(['Review took too long to load…']),
         {headers: {'content-type': 'application/json'}}));
     // Synthetic offline responses
     await offlineCache.put('https://commons.wikimedia.org/offline',
@@ -77,7 +77,7 @@ self.addEventListener('install', (installEvent) => {
         'Offers can\'t be loaded while offline\n',
         {headers: {'content-type': 'text/plain'}}));
     await offlineCache.put('https://baconipsum.com/offline', new Response(
-        JSON.stringify(['Reviews can\'t be loaded while offline…']),
+        JSON.stringify(['Review can\'t be loaded while offline…']),
         {headers: {'content-type': 'application/json'}}));
     return;
   })());
@@ -181,10 +181,10 @@ self.addEventListener('fetch', (fetchEvent) => {
     // Deal with navigational requests
     if (request.mode === 'navigate') {
       // The root `/` is actually cached as `/index.html`
-      if (url.pathname === '/') {
-        console.log(`${url.origin}/index.html${url.search}`);
-        return cacheWithNetworkFallback(`${url.origin}/index.html${url.search}`,
-            {ignoreSearch: true});
+      if (url.pathname.endsWith('/')) {
+        const rewrittenURL =
+            `${url.origin}${url.pathname}index.html${url.search}${url.hash}`;
+        return cacheWithNetworkFallback(rewrittenURL, {ignoreSearch: true});
       }
       // Any other resource
       return cacheWithNetworkFallback(request, {ignoreSearch: true});
