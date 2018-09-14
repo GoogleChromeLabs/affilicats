@@ -1,4 +1,4 @@
-const VERSION = 1536926075670;
+const VERSION = 1536926075671;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -132,9 +132,7 @@ self.addEventListener('fetch', (fetchEvent) => {
           return resolve(cache.match(TIMEOUT_IMG_URL));
         }
       }
-      // This should never happen, but just in case
-      console.warn('Unhandled timeout case', url);
-      return new Response();
+      return resolve(cache.match(request));
     }, TIMEOUT));
     // …against the network promise
     const fetchPromise = (async () => {
@@ -163,7 +161,7 @@ self.addEventListener('fetch', (fetchEvent) => {
           }
         }
         // This should never happen, but just in case
-        console.warn('Unhandled offline case', url);
+        console.warn('Unhandled offline case', e);
         return new Response();
       };
     })();
