@@ -6,7 +6,7 @@
   const offline = document.querySelector('.offline');
   const main = document.querySelector('main');
   const search = document.querySelector('input[type="search"]');
-  const button = document.querySelector('button');
+  const button = document.querySelector('button[type="submit"]');
   const template = document.getElementById('cat');
   const install = document.querySelector('.install');
 
