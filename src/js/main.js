@@ -97,9 +97,6 @@
       const figcaption = catContainer.querySelector('figcaption');
       figcaption.textContent =
           (figcaption.innerHTML = cat.description, figcaption.textContent);
-      if (/took too long to load/.test(cat.description)) {
-        return;
-      }
       // Metadata
       const priceDrop = catContainer.querySelector('.pricedrop');
       if (pushSupported) {
@@ -292,9 +289,27 @@
     lazyLoadInit();
   });
 
+  const showSkeletonContent = () => {
+    for (let i = 0; i < 3; i++) {
+      const content = template.content;
+      const labels = content.querySelectorAll('.tab label');
+      const tabContents = content.querySelectorAll('.tabcontent');
+      content.querySelectorAll('.tab input').forEach((input, index) => {
+        const id = Math.random().toString().substr(2);
+        input.name = `tabgroup${i}`;
+        input.id = id;
+        labels[index].setAttribute('for', id);
+        tabContents[index].setAttribute('aria-labelledby', id);
+      });
+      main.innerHTML = '';
+      main.appendChild(document.importNode(content, true));
+    }
+  };
+
   const firstTimeSetup = () => {
     document.querySelector('form').addEventListener('submit', (e) => {
       e.preventDefault();
+      showSkeletonContent();
       init();
     });
 
@@ -319,19 +334,7 @@
       });
     });
 
-    for (let i = 0; i < 3; i++) {
-      const content = template.content;
-      const labels = content.querySelectorAll('.tab label');
-      const tabContents = content.querySelectorAll('.tabcontent');
-      content.querySelectorAll('.tab input').forEach((input, index) => {
-        const id = Math.random().toString().substr(2);
-        input.name = `tabgroup${i}`;
-        input.id = id;
-        labels[index].setAttribute('for', id);
-        tabContents[index].setAttribute('aria-labelledby', id);
-      });
-      main.appendChild(document.importNode(content, true));
-    }
+    showSkeletonContent();
 
     const online = navigator.onLine;
     offline.hidden = online;

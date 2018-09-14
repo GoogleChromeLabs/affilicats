@@ -1,4 +1,4 @@
-const VERSION = 1536849828901;
+const VERSION = 1536924859673;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -7,14 +7,15 @@ const HOME_URL = 'https://tomayac.github.io/affilicats/index.html';
 
 const OFFLINE_IMG_URL = './img/offline.svg';
 const TIMEOUT_IMG_URL = './img/timeout.svg';
+const MANIFEST_URL = './manifest.webmanifest';
 const STATIC_FILES = [
   './index.html',
   './forward.html',
-  './manifest.webmanifest',
   './js/main.js',
   './js/forward.js',
   './img/cat.png',
   './img/map.svg',
+  MANIFEST_URL,
   OFFLINE_IMG_URL,
   TIMEOUT_IMG_URL,
 ];
@@ -22,8 +23,63 @@ const STATIC_FILES = [
 self.addEventListener('install', (installEvent) => {
   self.skipWaiting();
   installEvent.waitUntil((async () => {
-    const cache = await caches.open(OFFLINE_CACHE);
-    return cache.addAll(STATIC_FILES);
+    const offlineCache = await caches.open(OFFLINE_CACHE);
+    await offlineCache.addAll(STATIC_FILES);
+    // Synthetic timeout responses
+    await offlineCache.put('https://commons.wikimedia.org/timeout',
+        new Response(JSON.stringify({
+          query: {
+            pages: {
+              '1': {
+                'imageinfo': [{
+                  'thumburl': TIMEOUT_IMG_URL,
+                  'thumbwidth': 15,
+                  'thumbheight': 15,
+                  'descriptionshorturl': '#',
+                  'extmetadata': {
+                    'ImageDescription': {
+                      'value': 'Results took too long to load…',
+                    },
+                  },
+                }],
+              },
+            },
+          },
+        }), {headers: {'content-type': 'application/json'}}));
+    await offlineCache.put('https://www.random.org/timeout', new Response(
+        'Offers timed out while loading\n',
+        {headers: {'content-type': 'text/plain'}}));
+    await offlineCache.put('https://baconipsum.com/timeout', new Response(
+        JSON.stringify(['Reviews took too long to load…']),
+        {headers: {'content-type': 'application/json'}}));
+    // Synthetic offline responses
+    await offlineCache.put('https://commons.wikimedia.org/offline',
+        new Response(JSON.stringify({
+          query: {
+            pages: {
+              '1': {
+                'imageinfo': [{
+                  'thumburl': OFFLINE_IMG_URL,
+                  'thumbwidth': 15,
+                  'thumbheight': 15,
+                  'descriptionshorturl': '#',
+                  'extmetadata': {
+                    'ImageDescription': {
+                      'value': 'Can\'t search while offline…',
+                    },
+                  },
+                }],
+              },
+            },
+          },
+        }), {headers: {'content-type': 'application/json'}}));
+    await offlineCache.put('https://www.random.org/offline', new Response(
+        'Offers can\'t be loaded while offline\n',
+        {headers: {'content-type': 'text/plain'}}));
+    await offlineCache.put('https://baconipsum.com/offline', new Response(
+        JSON.stringify(['Reviews can\'t be loaded while offline…']),
+        {headers: {'content-type': 'application/json'}}));
+    return;
   })());
 });
 
@@ -40,127 +96,112 @@ self.addEventListener('activate', (activateEvent) => {
 });
 
 self.addEventListener('fetch', (fetchEvent) => {
+  // Fail early
   if ((!fetchEvent.request.url.startsWith('http')) ||
       (fetchEvent.request.method !== 'GET')) {
     return;
   }
 
-  const cacheWithNetworkFallback =
-      async (requestOrURL, matchOpt = {}, fetchOpt = {}) => {
-        const cache = await caches.open(OFFLINE_CACHE);
-        const match = await cache.match(requestOrURL, matchOpt);
-        return match || fetch(requestOrURL, fetchOpt);
-      };
+  // Strategy 1: cache, falling back to network (i.e., strategy 2)
+  const cacheWithNetworkFallback = async (requestOrURL, matchOpt = {},
+    fetchOpt = {}) => {
+    const cache = await caches.open(OFFLINE_CACHE);
+    const match = await cache.match(requestOrURL, matchOpt);
+    return match || networkWithTimeout(requestOrURL, fetchOpt);
+  };
 
+  // Strategy 2: network, falling back to timeout content
   const networkWithTimeout = async (request, destination, url) => {
-    const waitPromise = new Promise((resolve) => setTimeout(() => {
+    // Race the timeout promise…
+    const timeoutPromise = new Promise((resolve) => setTimeout(async () => {
+      const cache = await caches.open(OFFLINE_CACHE);
       if (destination === 'image') {
-        return resolve(cacheWithNetworkFallback(TIMEOUT_IMG_URL));
+        return resolve(cache.match(TIMEOUT_IMG_URL));
+      }
+      if (destination === 'manifest') {
+        return resolve(cache.match(MANIFEST_URL));
       }
       if (!destination) {
-        if (url.origin === 'https://commons.wikimedia.org') {
-          const blob = new Blob(
-              [JSON.stringify({
-                query: {
-                  pages: {
-                    '1': {
-                      'imageinfo': [{
-                        'thumburl': TIMEOUT_IMG_URL,
-                        'thumbwidth': 15,
-                        'thumbheight': 15,
-                        'descriptionshorturl': '#',
-                        'extmetadata': {
-                          'ImageDescription': {
-                            'value': 'Results took too long to load…',
-                          },
-                        },
-                      }],
-                    },
-                  },
-                },
-              })],
-              {type: 'application/json'});
-          return resolve(new Response(blob));
-        }
-        if (url.origin === 'https://www.random.org') {
-          const blob = new Blob(
-              ['Offers timed out while loading\n'],
-              {type: 'text/plain'});
-          return resolve(new Response(blob));
-        }
-        if (url.origin === 'https://baconipsum.com') {
-          const blob = new Blob(
-              [JSON.stringify(['Reviews took too long to load…'])],
-              {type: 'application/json'});
-          return resolve(new Response(blob));
+        if ((url.origin === 'https://commons.wikimedia.org') ||
+            (url.origin === 'https://www.random.org') ||
+            (url.origin === 'https://baconipsum.com')) {
+          return resolve(cache.match(`${url.origin}/timeout`,
+              {ignoreSearch: true}));
         }
         if (url.origin === 'https://placekitten.com') {
-          return resolve(cacheWithNetworkFallback(TIMEOUT_IMG_URL));
+          return resolve(cache.match(TIMEOUT_IMG_URL));
         }
       }
+      // This should never happen, but just in case
+      console.warn('Unhandled timeout case', url);
+      return new Response();
     }, TIMEOUT));
-
-    const sameOrigin = url.origin === location.origin;
-    const fetchPromise = fetch(request)
-        .then((response) => {
-          if (sameOrigin && !response.ok) {
-            throw new TypeError(`Could not load ${request.url}`);
+    // …against the network promise
+    const fetchPromise = (async () => {
+      try {
+        const response = await fetch(request);
+        if ((url.origin === location.origin) && !response.ok) {
+          throw new TypeError(`Could not load ${request.url}`);
+        }
+        return response;
+      } catch (e) {
+        const cache = await caches.open(OFFLINE_CACHE);
+        if (destination === 'image') {
+          return cache.match(OFFLINE_IMG_URL);
+        }
+        if (destination === 'manifest') {
+          return cache.match(MANIFEST_URL);
+        }
+        if (!destination) {
+          if ((url.origin === 'https://commons.wikimedia.org') ||
+              (url.origin === 'https://www.random.org') ||
+              (url.origin === 'https://baconipsum.com')) {
+            return cache.match(`${url.origin}/offline`);
           }
-          return response;
-        })
-        .catch((e) => {
-          if (destination === 'image') {
-            return cacheWithNetworkFallback(OFFLINE_IMG_URL);
+          if (url.origin === 'https://placekitten.com') {
+            return cache.match(OFFLINE_IMG_URL);
           }
-          if (!destination) {
-            if (url.origin === 'https://commons.wikimedia.org') {
-              const blob = new Blob(
-                  [JSON.stringify({query: {pages: {}}})],
-                  {type: 'application/json'});
-              return new Response(blob);
-            }
-            if (url.origin === 'https://www.random.org') {
-              const blob = new Blob(
-                  ['Offers can\'t be loaded while offline\n'],
-                  {type: 'text/plain'});
-              return new Response(blob);
-            }
-            if (url.origin === 'https://baconipsum.com') {
-              const blob = new Blob(
-                  [JSON.stringify(['Reviews can\'t be loaded while offline…'])],
-                  {type: 'application/json'});
-              return new Response(blob);
-            }
-            if (url.origin === 'https://placekitten.com') {
-              return cacheWithNetworkFallback(OFFLINE_IMG_URL);
-            }
-          }
-          return new Response();
-        });
+        }
+        // This should never happen, but just in case
+        console.warn('Unhandled offline case', url);
+        return new Response();
+      };
+    })();
+    // Start the race
     return Promise.race([
-      waitPromise,
+      timeoutPromise,
       fetchPromise,
     ]);
   };
 
+  // The actual handler
   fetchEvent.respondWith((async () => {
     const request = fetchEvent.request;
+    const url = new URL(request.url);
+    // Deal with navigational requests
     if (request.mode === 'navigate') {
-      if (/\/$/.test(request.url)) {
-        return cacheWithNetworkFallback(`${request.url}index.html`,
+      // The root `/` is actually cached as `/index.html`
+      if (url.pathname === '/') {
+        console.log(`${url.origin}/index.html${url.search}`);
+        return cacheWithNetworkFallback(`${url.origin}/index.html${url.search}`,
             {ignoreSearch: true});
       }
+      // Any other resource
       return cacheWithNetworkFallback(request, {ignoreSearch: true});
     }
+    // Deal with non-navigational requests
     const destination = request.destination;
-    const url = new URL(request.url);
     if (destination) {
+      // Deal with scripts
       if (destination === 'script') {
+        // Deal with polyfills
         if (url.origin === 'https://unpkg.com') {
           return cacheWithNetworkFallback(request, {}, {mode: 'no-cors'});
         }
+        // Deal with local scripts
         return cacheWithNetworkFallback(request);
       }
+      // Deal with images
       if (destination === 'image') {
         if (STATIC_FILES.includes(request.url)) {
           return cacheWithNetworkFallback(request);
@@ -168,9 +209,11 @@ self.addEventListener('fetch', (fetchEvent) => {
         return networkWithTimeout(request, destination, url);
       }
     }
+    // Deal with polyfills
     if (url.origin === 'https://unpkg.com') {
       return cacheWithNetworkFallback(request, {}, {mode: 'no-cors'});
     }
+    // Deal with everything else
     return networkWithTimeout(request, destination, url);
   })());
 });
