@@ -150,12 +150,13 @@
         margin: 1em 0;
       }
 
-      .wrapper {
+      .outlink {
         display: flex;
         justify-content: center;
+        margin-bottom: 1em;
       }
 
-      .outlink {
+      .outlink > a {
         width: 90%;
         border: solid 1px #E65100;
         border-radius: .25em;
@@ -284,10 +285,12 @@
       }
 
       .offline {
+        align-items: center;
+        justify-content: center;
         position: fixed;
-        left: 0;
         bottom: 0;
         width: 100%;
+        max-width: 500px;
         height: 5em;
         background-color: #ccc;
         text-align: center;
@@ -309,7 +312,7 @@
       </form>
     </div>
     <main data-hydrated="false"></main>
-    <div hidden class="offline">⚠️ Seems like we're offline at the moment</div>
+    <div class="offline">⚠️ Seems like we're offline at the moment</div>
     <footer>© 2018 AffiliCats</footer>
 
     <template id="cat">
@@ -334,8 +337,8 @@
           <li class="stars">Cuteness rating: ⏳</li>
           <li class="price">Price range: ⏳</li>
         </ul>
-        <div class="wrapper">
-          <a class="outlink" rel="nofollow">Loading Deal…</a>
+        <div class="outlink">
+          <a rel="nofollow">Loading Deal…</a>
         </div>
         <div class="tabs" role="tablist">
           <div class="tab photos">

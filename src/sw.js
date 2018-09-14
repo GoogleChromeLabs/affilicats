@@ -1,4 +1,4 @@
-const VERSION = 1536930842230;
+const VERSION = 1536940900294;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -160,9 +160,6 @@ self.addEventListener('fetch', (fetchEvent) => {
             return cache.match(OFFLINE_IMG_URL);
           }
         }
-        // This should never happen, but just in case
-        console.warn('Unhandled offline case', e);
-        return new Response();
       };
     })();
     // Start the race
@@ -180,8 +177,8 @@ self.addEventListener('fetch', (fetchEvent) => {
     if (request.mode === 'navigate') {
       // The root `/` is actually cached as `/index.html`
       if (url.pathname.endsWith('/')) {
-        const rewrittenURL =
-            `${url.origin}${url.pathname}index.html${url.search}${url.hash}`;
+        url.pathname += 'index.html';
+        const rewrittenURL = url.href;
         return cacheWithNetworkFallback(new Request(rewrittenURL),
             {ignoreSearch: true});
       }

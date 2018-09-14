@@ -125,9 +125,12 @@
       price.textContent = `Price range: ${'💰'.repeat(Math.floor(
           Math.random() * 3) + 1)}`;
       // Outlink
-      const a = catContainer.querySelector('.outlink');
+      const a = catContainer.querySelector('.outlink > a');
       a.href = `./forward.html?url=${encodeURIComponent(cat.url)}`;
       a.textContent = 'View Deal';
+      a.addEventListener('click', (e) => {
+        localStorage.setItem('engagement', true);
+      });
       // Tabs
       const tabs = catContainer.querySelector('.tabs');
       tabs.addEventListener('click', () => {
@@ -268,7 +271,7 @@
   };
 
   window.addEventListener('offline', () => {
-    offline.hidden = false;
+    offline.style.display = 'flex';
     search.disabled = true;
     button.disabled = true;
     document.querySelectorAll('input[data-active="true"]').forEach((input) => {
@@ -277,7 +280,7 @@
   });
 
   window.addEventListener('online', () => {
-    offline.hidden = true;
+    offline.style.display = 'none';
     search.disabled = false;
     button.disabled = false;
     document.querySelectorAll('input[data-active="true"]').forEach((input) => {
@@ -314,6 +317,10 @@
     });
 
     window.addEventListener('beforeinstallprompt', (event) => {
+      if (!localStorage.getItem('engagement')) {
+        console.log('Install button hidden due to no prior engagement');
+        return;
+      }
       event.preventDefault();
       installPromptEvent = event;
       install.disabled = false;
@@ -337,7 +344,7 @@
     showSkeletonContent();
 
     const online = navigator.onLine;
-    offline.hidden = online;
+    offline.style.display = online ? 'none' : 'flex';
     search.disabled = !online;
     button.disabled = !online;
 

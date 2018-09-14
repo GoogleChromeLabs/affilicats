@@ -31,6 +31,8 @@
     <style>
       html {
         box-sizing: border-box;
+        display: flex;
+        justify-content: center;
       }
 
       *, *:before, *:after {
@@ -39,8 +41,9 @@
 
       body {
         font-size: 14pt;
-        font-family: "Benton Sans", "Helvetica Neue", helvetica, arial, sans-serif;
+        font-family: "Helvetica Neue", helvetica, arial, sans-serif;
         margin: .5em;
+        width: 100%;
         max-width: 500px;
       }
 
@@ -53,20 +56,22 @@
         color: #373fff;
       }
 
-      p {
-        margin-left: 1.5em;
-        overflow-wrap: break-word;
-      }
-
       a, span {
         margin: 0 .25em 0 0;
       }
 
+      p {
+        position: relative;
+      }
+
       .offline {
+        display: none;
+        align-items: center;
+        justify-content: center;
         position: fixed;
-        left: 0;
         bottom: 0;
         width: 100%;
+        max-width: 500px;
         height: 5em;
         background-color: #ccc;
         text-align: center;
@@ -74,7 +79,7 @@
 
       #hourglass {
         position: absolute;
-        left: .5em;
+        top: -2em;
       }
 
       #hourglass.spin {
@@ -107,7 +112,7 @@
         <span> seconds…</span>
       </p>
     </header>
-    <div hidden class="offline">⚠️ Seems like we're offline at the moment</div>
+    <div class="offline">⚠️ Seems like we're offline at the moment</div>
     <footer>© 2018 AffiliCats</footer>
   </body>
 </html>
