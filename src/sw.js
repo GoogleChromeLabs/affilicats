@@ -3,6 +3,8 @@ const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
 
+const HOME_URL = 'https://tomayac.github.io/affilicats/index.html';
+
 const OFFLINE_IMG_URL = './img/offline.svg';
 const TIMEOUT_IMG_URL = './img/timeout.svg';
 const STATIC_FILES = [
@@ -17,7 +19,7 @@ const STATIC_FILES = [
   TIMEOUT_IMG_URL,
 ];
 
-self.addEventListener('install', async (installEvent) => {
+self.addEventListener('install', (installEvent) => {
   self.skipWaiting();
   installEvent.waitUntil((async () => {
     const cache = await caches.open(OFFLINE_CACHE);
@@ -38,6 +40,11 @@ self.addEventListener('activate', (activateEvent) => {
 });
 
 self.addEventListener('fetch', (fetchEvent) => {
+  if ((!fetchEvent.request.url.startsWith('http')) ||
+      (fetchEvent.request.method !== 'GET')) {
+    return;
+  }
+
   const cacheWithNetworkFallback =
       async (requestOrURL, matchOpt = {}, fetchOpt = {}) => {
         const cache = await caches.open(OFFLINE_CACHE);
@@ -147,9 +154,6 @@ self.addEventListener('fetch', (fetchEvent) => {
     }
     const destination = request.destination;
     const url = new URL(request.url);
-    if (url.protocol === 'chrome-extension:') {
-      return fetch(url);
-    }
     if (destination) {
       if (destination === 'script') {
         if (url.origin === 'https://unpkg.com') {
@@ -171,7 +175,7 @@ self.addEventListener('fetch', (fetchEvent) => {
   })());
 });
 
-self.addEventListener('push', async (pushEvent) => {
+self.addEventListener('push', (pushEvent) => {
   pushEvent.waitUntil(
       self.registration.showNotification('🐈 AffiliCats Price Drop Alert 🚨', {
         body: 'Prices for cats are going down! 📉',
@@ -180,20 +184,17 @@ self.addEventListener('push', async (pushEvent) => {
   );
 });
 
-self.addEventListener('notificationclick', (clickEvent) => {
-  clickEvent.notification.close();
-  clickEvent.waitUntil(clients.matchAll({
-    type: 'window',
-  }).
-      then((clientList) => {
-        for (const i = 0; i < clientList.length; i++) {
-          const client = clientList[i];
-          if (client.url === self.registration.scope && 'focus' in client) {
-            return client.focus();
-          }
-        }
-        if (clients.openWindow) {
-          return clients.openWindow(self.registration.scope);
-        }
-      }));
+self.addEventListener('notificationclick', async (clickEvent) => {
+  clickEvent.waitUntil((async () => {
+    clickEvent.notification.close();
+    const clientList = await clients.matchAll({type: 'window'});
+    for (const client of clientList) {
+      if (client.url === HOME_URL && 'focus' in client) {
+        return client.focus();
+      }
+    }
+    if (clients.openWindow) {
+      return clients.openWindow(HOME_URL);
+    }
+  })());
 });
