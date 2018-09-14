@@ -56,29 +56,38 @@
         box-sizing: inherit;
       }
 
+      :root {
+        --body-bg: hsl(0,0%,98%);
+        --grey-light: hsl(0,0%,90%);
+        --brand-blue: hsl(238, 80%, 61%);
+      }
+
       body {
-        font-size: 14pt;
-        font-family: "Helvetica Neue", helvetica, arial, sans-serif;
-        margin: .5em;
-        width: 100%;
-        max-width: 500px;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Droid Sans, Helvetica Neue;
+        background: var(--body-bg);        
+      }
+
+      @media (min-width:500px) {
+        body {
+          width: 500px;
+        }
       }
 
       header {
         position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 2em 0;
       }
 
       header > a {
         text-decoration: none;
       }
 
-      header > p {
-        margin: 0 .25em;
-      }
-
       h1 {
         font-style: italic;
-        color: #373fff;
+        color: var(--brand-blue);
         margin: 0 .25em;
       }
 
@@ -88,23 +97,19 @@
       }
 
       figure {
-        background-color: #eee;
-        border-radius: .25em;
-        padding: 1em;
-        margin: .25em;
+        margin: 0;
       }
 
       figure img {
         width: 100%;
         object-fit: cover;
+        background-color: var(--grey-light);
       }
 
       figcaption {
-        background-color: #eee;
-      }
-
-      form {
-        display: flex;
+        font-size: 0.6em;
+        padding: 0.25em;
+        text-align: center;
       }
 
       a, span {
@@ -112,26 +117,57 @@
       }
 
       .search {
-        background-color: #fff;
         position: sticky;
         top: 0;
         z-index: 1;
+        background: var(--body-bg);
+        padding: 0.5em 0;
+      }
+
+      .search > form {
+        display: grid;
+        grid-template-columns: 4fr 1fr;
+        grid-gap: 1em;
+        align-items: center;
       }
 
       .search input {
+        background-color: var(--grey-light);
         font-size: inherit;
-        border: solid black .1em;
+        border: none;
         border-radius: .25em;
-        margin: 1em 0;
-        width: 80%;
+        padding: 0.5em 1em;
+        padding-left: 2.5em;
+        width: 100%;
+        caret-color: blue;
+        font-weight: lighter;
       }
 
-      .search button {
+      .search input:focus-visible {
+        outline: 2px solid blue;
+      }
+
+      button {
         font-size: inherit;
-        border: solid black .1em;
+        border: 1px solid transparent;
         border-radius: .25em;
-        margin: 1em 0;
-        width: 20%;
+        background: var(--brand-blue);
+        color: white;
+        height: 100%;
+        padding: 0.5em 1em;
+        font-size: 1rem;
+        font-weight: lighter;
+      }
+
+      .search button:hover {
+        border-color: blue;
+      }
+
+      .search svg {
+        position: absolute;
+        left: 0.5em;
+        top: 0.9em;
+        fill: hsl(0,0%,50%);
       }
 
       .install {
@@ -145,9 +181,12 @@
       }
 
       .container {
-        border: solid black .1em;
+        background: white;
+        border: solid var(--grey-light) 1px;
         border-radius: .25em;
         margin: 1em 0;
+        overflow: hidden;
+        /*box-shadow: 0 1px 2px 0 rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15);*/
       }
 
       .outlink {
@@ -168,9 +207,19 @@
         text-decoration: none;
       }
 
+      .cuteness {
+        margin: 1em;
+        padding: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 1rem;
+        text-align: center;
+      }
+
       .offers {
         color: #311b92;
         list-style: none;
+        padding: 1em;
       }
 
       .stars {
@@ -183,14 +232,16 @@
         text-shadow: 0 0 0 #607d8b;
       }
 
+      .stars:before, .price:before {
+        content: attr(data-label);
+        color: hsl(0,0%,30%);
+      }
+
       .pricedrop {
-        padding-left: 2em;
-        padding-inline-start: 2em;
+        margin-left: 1em;
       }
 
       .pricedrop label {
-        border: 1px #361594 solid;
-        border-radius: .25em;
         padding: .25em;
       }
 
@@ -245,7 +296,7 @@
         object-fit: cover;
         width: 100%;
         height: auto;
-        border: solid 1px #eee;
+        border: solid 1px var(--grey-light);
       }
 
       .photos {
@@ -301,12 +352,15 @@
     <header>
       <button disabled hidden class="install">📲 Install</button>
       <a href="./"><h1>🐈 AffiliCats</h1></a>
-      <p>
+      <small>
         Find the cutest cats online!
-      </p>
+      </small>
     </header>
     <div class="search">
       <form>
+        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.5 14l4.99 5L19 20.49l-5-4.99v-.79l-.27-.28A6.471 6.471 0 0 1 9.5 16 6.5 6.5 0 1 1 16 9.5c0 1.61-.59 3.09-1.57 4.23l.28.27h.79zm-6 0c2.49 0 4.5-2.01 4.5-4.5S11.99 5 9.5 5 5 7.01 5 9.5 7.01 14 9.5 14z"></path>
+        </svg>
         <input type="search" value="" aria-label="search through site content">
         <button type="submit" value="Search">Go</button>
       </form>
@@ -319,24 +373,24 @@
       <div class="container">
         <div class="header">
           <figure>
-            <img alt="Cat placeholder" height="100" src="./img/cat.svg">
+            <img alt="Cat placeholder" src="./img/cat.svg">
             <figcaption>⏳ Loading cats…</figcaption>
           </figure>
+          <ul class="cuteness">
+            <li class="stars" data-label="Cuteness">⏳</li>
+            <li class="price" data-label="Price">⏳</li>
+          </ul>
           <ul class="offers lazyload">
             <li>⏳ Loading offers…</li>
           </ul>
-          <div hidden class="pricedrop">
+          <button hidden class="pricedrop">
             <label>
               🛎 Price Drop Alerts
               <span hidden>✅ Active</span>
               <input type="checkbox" data-active="true">
             </label>
-          </div>
+          </button>
         </div>
-        <ul>
-          <li class="stars">Cuteness rating: ⏳</li>
-          <li class="price">Price range: ⏳</li>
-        </ul>
         <div class="outlink">
           <a rel="nofollow">Loading Deal…</a>
         </div>

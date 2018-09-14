@@ -119,10 +119,10 @@
         priceDrop.hidden = true;
       }
       const stars = catContainer.querySelector('.stars');
-      stars.textContent = `Cuteness rating: ${'😻'.repeat(Math.floor(
+      stars.textContent = `${'😻'.repeat(Math.floor(
           Math.random() * 5) + 1)}`;
       const price = catContainer.querySelector('.price');
-      price.textContent = `Price range: ${'💰'.repeat(Math.floor(
+      price.textContent = `${'💰'.repeat(Math.floor(
           Math.random() * 3) + 1)}`;
       // Outlink
       const a = catContainer.querySelector('.outlink > a');
