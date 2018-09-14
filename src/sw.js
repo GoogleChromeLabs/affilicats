@@ -1,9 +1,9 @@
-const VERSION = 1536940900294;
+const VERSION = 1536957163915;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
 
-const HOME_URL = 'https://tomayac.github.io/affilicats/index.html';
+const HOME_URL = 'https://tomayac.github.io/affilicats/';
 
 const OFFLINE_IMG_URL = './img/offline.svg';
 const TIMEOUT_IMG_URL = './img/timeout.svg';
