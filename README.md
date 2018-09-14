@@ -42,7 +42,7 @@ You can build to there by running `npm run build`.
 
 ## Acknowledgements
 
-Thanks to @jeffposnick for the thorough review of the app's service worker code.
+Thanks to [@jeffposnick](https://github.com/jeffposnick) for the thorough review of the app's service worker code.
 
 ## License
 
