@@ -6,7 +6,6 @@ const TIMEOUT = 5000;
 const OFFLINE_IMG_URL = './img/offline.svg';
 const TIMEOUT_IMG_URL = './img/timeout.svg';
 const STATIC_FILES = [
-  './',
   './index.html',
   './forward.html',
   './manifest.webmanifest',
@@ -40,10 +39,10 @@ self.addEventListener('activate', (activateEvent) => {
 
 self.addEventListener('fetch', (fetchEvent) => {
   const cacheWithNetworkFallback =
-      async (request, matchOpt = {}, fetchOpt = {}) => {
+      async (requestOrURL, matchOpt = {}, fetchOpt = {}) => {
         const cache = await caches.open(OFFLINE_CACHE);
-        const match = await cache.match(request, matchOpt);
-        return match || fetch(request, fetchOpt);
+        const match = await cache.match(requestOrURL, matchOpt);
+        return match || fetch(requestOrURL, fetchOpt);
       };
 
   const networkWithTimeout = async (request, destination, url) => {
@@ -140,6 +139,10 @@ self.addEventListener('fetch', (fetchEvent) => {
   fetchEvent.respondWith((async () => {
     const request = fetchEvent.request;
     if (request.mode === 'navigate') {
+      if (/\/$/.test(request.url)) {
+        return cacheWithNetworkFallback(`${request.url}index.html`,
+            {ignoreSearch: true});
+      }
       return cacheWithNetworkFallback(request, {ignoreSearch: true});
     }
     const destination = request.destination;
