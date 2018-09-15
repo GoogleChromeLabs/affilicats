@@ -67,10 +67,10 @@
         background: var(--body-bg);        
       }
 
-      @media (min-width:500px) {
-        body {
-          width: 500px;
-        }
+      main {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+        grid-gap: 0.5em;
       }
 
       header {
@@ -107,7 +107,7 @@
       }
 
       figcaption {
-        font-size: 0.6em;
+        font-size: 0.7em;
         padding: 0.25em;
         text-align: center;
       }
@@ -189,9 +189,7 @@
         background: white;
         border: solid var(--grey-light) 1px;
         border-radius: .25em;
-        margin: 1em 0;
         overflow: hidden;
-        /*box-shadow: 0 1px 2px 0 rgba(0,0,0,.3), 0 2px 6px 2px rgba(0,0,0,.15);*/
       }
 
       .outlink > a {
@@ -230,7 +228,7 @@
         border-radius: 2em;
         font-size: 0.9em;
         color: hsl(0,0%,60%);
-        margin: 0 1em 1em 0;
+        margin: 0 0.5em 0.5em 0;
       }
 
       span[price] {
@@ -242,6 +240,7 @@
         grid-template-columns: 1fr 1fr;
         grid-gap: 1em;
         margin-bottom: 2em;
+        padding: 0 1em;
       }
 
       .stars {
@@ -261,10 +260,6 @@
         text-shadow: none;
       }
 
-      .pricedrop {
-        margin-left: 1em;
-      }
-
       .pricedrop label {
         padding: .25em;
       }
@@ -277,8 +272,6 @@
       .tabs {
         position: relative;
         height: 25em;
-        margin: .25em;
-        clear: both;
       }
 
       .tab {
