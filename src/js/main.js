@@ -188,8 +188,8 @@
               .sort((a, b) => a - b)
               .map((number, index) => {
                 const li = document.createElement('li');
-                li.textContent = /\d+/.test(number) ?
-            `From $${number} at Affiliate ${index}` : number;
+                li.innerHTML = /\d+/.test(number) ?
+            `<sup>$</sup><span price>${number}</span> | Affiliate ${index}` : number;
                 fragment.appendChild(li);
               });
           offers.innerHTML = '';
