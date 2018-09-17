@@ -2,15 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#373fff">
     <meta name="description" content="AffiliCats Progressive Web App demo that showcases flaky network resilience measures">
 
+    <link rel="stylesheet" href="./css/main.css">
     <link rel="icon" href="./img/cat.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="preload" href="./img/cat.svg" as="image">
     <link rel="preload" href="./js/main.js" as="script">
+    <link rel="preload" href="./img/cat.png" as="image">
+    <link rel="preload" href="./img/cat.svg" as="image">
     <link rel="preconnect" href="https://commons.wikimedia.org/" crossorigin>
     <link rel="preconnect" href="https://upload.wikimedia.org/" crossorigin>
     <link rel="preconnect" href="https://www.random.org/" crossorigin>
@@ -44,340 +46,11 @@
     </script>
 
     <script src="./js/main.js" defer></script>
-
-    <style>
-      html {
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-      }
-
-      *, *:before, *:after {
-        box-sizing: inherit;
-      }
-
-      :root {
-        --body-bg: hsl(0,0%,98%);
-        --grey-light: hsl(0,0%,90%);
-        --brand-blue: hsl(238, 80%, 61%);
-      }
-
-      body {
-        font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Droid Sans, Helvetica Neue;
-        background: var(--body-bg);        
-      }
-
-      main {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
-        grid-gap: 0.5em;
-      }
-
-      header {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin: 2em 0;
-      }
-
-      header > a {
-        text-decoration: none;
-      }
-
-      h1 {
-        font-style: italic;
-        color: var(--brand-blue);
-        margin: 0 .25em;
-      }
-
-      ul {
-        padding-left: 2em;
-        padding-inline-start: 2em;
-      }
-
-      figure {
-        margin: 0;
-      }
-
-      figure img {
-        width: 100%;
-        object-fit: cover;
-        background-color: var(--grey-light);
-      }
-
-      figcaption {
-        font-size: 0.7em;
-        padding: 0.25em;
-        text-align: center;
-      }
-
-      a, span {
-        margin: 0 .25em;
-      }
-
-      .search {
-        position: sticky;
-        top: 0;
-        z-index: 1;
-        background: var(--body-bg);
-        padding: 0.5em 0;
-      }
-
-      .search > form {
-        display: grid;
-        grid-template-columns: 4fr 1fr;
-        grid-gap: 1em;
-        align-items: center;
-      }
-
-      .search input {
-        background-color: var(--grey-light);
-        font-size: inherit;
-        border: none;
-        border-radius: .25em;
-        padding: 0.5em 1em;
-        padding-left: 2.5em;
-        width: 100%;
-        caret-color: blue;
-        font-weight: lighter;
-      }
-
-      .search input:focus-visible {
-        outline: 2px solid blue;
-      }
-
-      button {
-        font-size: inherit;
-        border: 1px solid transparent;
-        border-radius: .25em;
-        background: var(--brand-blue);
-        color: white;
-        height: 100%;
-        padding: 0.5em 1em;
-        font-size: 1rem;
-        font-weight: lighter;
-        position: relative;
-        cursor: pointer;
-      }
-
-      button:hover {
-        background: hsl(238, 50%, 51%);
-      }
-
-      button:active {
-        top: 1px;
-      }
-
-      .search button:hover {
-        border-color: blue;
-      }
-
-      .search svg {
-        position: absolute;
-        left: 0.5em;
-        top: 0.9em;
-        fill: hsl(0,0%,50%);
-      }
-
-      .install {
-        font-size: inherit;
-        border: solid black .1em;
-        border-radius: .25em;
-        position: absolute;
-        top: 1em;
-        right: 0;
-        width: 5em;
-      }
-
-      .container {
-        background: white;
-        border: solid var(--grey-light) 1px;
-        border-radius: .25em;
-        overflow: hidden;
-      }
-
-      .outlink > a {
-        color: white;
-        text-decoration: none;
-      }
-
-      .cuteness {
-        margin: 0.5em 0 0;
-        padding: 1em;
-        display: grid;
-        background: hsl(0,0%,97%);
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 1rem;
-        text-align: center;
-      }
-
-      .cuteness > li {
-        display: inline-flex;
-        flex-direction: column;
-      }
-
-      .cuteness > li:first-child {
-        border-right: 1px solid var(--grey-light);
-      }
-
-      .offers {
-        color: #311b92;
-        list-style: none;
-        padding: 1em;
-        display: flex;
-        flex-wrap: wrap;
-      }
-
-      .offers > li {
-        border: 1px solid var(--grey-light);
-        padding: 0.2em 1em 0.5em 1em;
-        border-radius: 2em;
-        font-size: 0.9em;
-        color: hsl(0,0%,60%);
-        margin: 0 0.5em 0.5em 0;
-      }
-
-      span[price] {
-        color: black;
-      }
-
-      .actions {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        grid-gap: 1em;
-        margin-bottom: 2em;
-        padding: 0 1em;
-      }
-
-      .stars {
-        color: transparent;
-        text-shadow: 0 0 0 #fdd835;
-      }
-
-      .price {
-        color: transparent;
-        text-shadow: 0 0 0 #607d8b;
-      }
-
-      .stars:before, .price:before {
-        content: attr(data-label);
-        font-weight: lighter;
-        color: hsl(0,0%,20%);
-        text-shadow: none;
-      }
-
-      .pricedrop label {
-        padding: .25em;
-      }
-
-      .pricedrop input {
-        position: absolute;
-        opacity: 0;
-      }
-
-      .tabs {
-        position: relative;
-        height: 25em;
-      }
-
-      .tab {
-        padding: 1em 0;
-        text-align: center;
-        float: left;
-        width: 33.333%;
-        border-top: 1px solid var(--grey-light);
-        cursor: pointer;
-      }
-
-      .tab:not(:last-child) {
-        border-right: 1px solid var(--grey-light);
-      }
-
-      .tab:hover {
-        background: hsl(0,0%,95%);
-      }
-
-      .tab > label {
-        pointer-events: none;
-      }
-
-      .checkboxtab {
-        opacity: 0;
-        position: absolute;
-      }
-
-      .checkboxtab:focus ~ label {
-        outline: rgb(229, 151, 0) auto 5px;
-        outline: -webkit-focus-ring-color auto 5px;
-      }
-
-      .tabcontent {
-        position: absolute;
-        left: 0;
-        top: 3em;
-        width: 100%;
-        display: none;
-        height: 22em;
-        text-align: left;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-        padding: .25em;
-        cursor: initial;
-      }
-
-      .checkboxtab:checked ~ .tabcontent {
-        display: block;
-      }
-
-      .map {
-        object-fit: cover;
-        width: 100%;
-        height: auto;
-        border: solid 1px var(--grey-light);
-      }
-
-      .gallery {
-        display: grid;
-        grid-gap: .25em;
-        grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
-        grid-auto-rows: 5em 5em;
-        grid-auto-flow: dense;
-        height: 100%;
-      }
-
-      .gallery img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      @media (min-width: 321px) {
-        .gallery img:first-child {
-          grid-area: 1 / 1 / span 2 / span 2;
-        }
-        .gallery img:nth-child(3n) {
-          grid-column: span 2;
-        }
-      }
-
-      .offline {
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        max-width: 500px;
-        height: 5em;
-        background-color: #ccc;
-        text-align: center;
-      }
-    </style>
   </head>
   <body>
     <header>
       <button disabled hidden class="install">📲 Install</button>
-      <a href="./"><h1>🐈 AffiliCats</h1></a>
+      <a href="./"><h1><img src="./img/cat.png" alt=""> AffiliCats</h1></a>
       <small>
         Find the cutest cats online!
       </small>
@@ -402,24 +75,16 @@
             <img alt="Cat placeholder" src="./img/cat.svg">
             <figcaption>⏳ Loading cats…</figcaption>
           </figure>
-          <ul class="cuteness">
-            <li class="stars" data-label="Cuteness">⏳</li>
+          <ul class="ratings">
+            <li class="cuteness" data-label="Cuteness">⏳</li>
             <li class="price" data-label="Price">⏳</li>
           </ul>
           <ul class="offers lazyload">
             <li>⏳ Loading offers…</li>
           </ul>
           <div class="actions">
-            <button hidden class="pricedrop">
-              <label>
-                🛎 Price Drop Alerts
-                <span hidden>✅ Active</span>
-                <input type="checkbox" data-active="true">
-              </label>
-            </button>
-            <button class="outlink">
-              <a rel="nofollow">Loading Deal…</a>
-            </button>
+            <button data-active="true" hidden class="pricedrop">🛎 Price Alerts</button>
+            <button class="outlink">📦 Loading Deal…</button>
           </div>
         </div>
         <div class="tabs" role="tablist">
@@ -427,7 +92,11 @@
             <input tabindex="0" type="radio" class="checkboxtab" checked role="tab">
             <label>Photos</label>
             <div class="tabcontent photos lazyload" role="tabpanel">
-              ⏳ Loading photos…
+              <div class="gallery">
+                <img alt="Cat placeholder" src="./img/cat.svg">
+                <img alt="Cat placeholder" src="./img/cat.svg">
+                <img alt="Cat placeholder" src="./img/cat.svg">
+              </div>
             </div>
           </div>
           <div class="tab reviews">

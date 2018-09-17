@@ -1,4 +1,4 @@
-const VERSION = 1536957163915;
+const VERSION = 1537213430353;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -8,6 +8,7 @@ const HOME_URL = 'https://tomayac.github.io/affilicats/';
 const OFFLINE_IMG_URL = './img/offline.svg';
 const TIMEOUT_IMG_URL = './img/timeout.svg';
 const MANIFEST_URL = './manifest.webmanifest';
+const CSS_URL = './css/main.css';
 const STATIC_FILES = [
   './index.html',
   './forward.html',
@@ -15,6 +16,7 @@ const STATIC_FILES = [
   './js/forward.js',
   './img/cat.png',
   './img/map.svg',
+  CSS_URL,
   MANIFEST_URL,
   OFFLINE_IMG_URL,
   TIMEOUT_IMG_URL,
@@ -38,7 +40,7 @@ self.addEventListener('install', (installEvent) => {
                   'descriptionshorturl': '#',
                   'extmetadata': {
                     'ImageDescription': {
-                      'value': 'Results took too long to load…',
+                      'value': '🤷‍♂️ Results took too long to load…',
                     },
                   },
                 }],
@@ -47,10 +49,10 @@ self.addEventListener('install', (installEvent) => {
           },
         }), {headers: {'content-type': 'application/json'}}));
     await offlineCache.put('https://www.random.org/timeout', new Response(
-        'Offers timed out while loading\n',
+        '🤷‍♀️ Offers timed out while loading\n',
         {headers: {'content-type': 'text/plain'}}));
     await offlineCache.put('https://baconipsum.com/timeout', new Response(
-        JSON.stringify(['Review took too long to load…']),
+        JSON.stringify(['🤷‍♂️ Review took too long to load…']),
         {headers: {'content-type': 'application/json'}}));
     // Synthetic offline responses
     await offlineCache.put('https://commons.wikimedia.org/offline',
@@ -65,7 +67,7 @@ self.addEventListener('install', (installEvent) => {
                   'descriptionshorturl': '#',
                   'extmetadata': {
                     'ImageDescription': {
-                      'value': 'Can\'t search while offline…',
+                      'value': '🙍‍♀️ Can\'t search while offline…',
                     },
                   },
                 }],
@@ -74,10 +76,10 @@ self.addEventListener('install', (installEvent) => {
           },
         }), {headers: {'content-type': 'application/json'}}));
     await offlineCache.put('https://www.random.org/offline', new Response(
-        'Offers can\'t be loaded while offline\n',
+        '🙍‍♂️ Offers can\'t be loaded while offline\n',
         {headers: {'content-type': 'text/plain'}}));
     await offlineCache.put('https://baconipsum.com/offline', new Response(
-        JSON.stringify(['Review can\'t be loaded while offline…']),
+        JSON.stringify(['🙍‍♀️ Review can\'t be loaded while offline…']),
         {headers: {'content-type': 'application/json'}}));
     return;
   })());
@@ -188,6 +190,10 @@ self.addEventListener('fetch', (fetchEvent) => {
     // Deal with non-navigational requests
     const destination = request.destination;
     if (destination) {
+      // Deal with stylesheets
+      if (destination === 'style') {
+        return cacheWithNetworkFallback(CSS_URL);
+      }
       // Deal with scripts
       if (destination === 'script') {
         // Deal with polyfills
@@ -199,7 +205,7 @@ self.addEventListener('fetch', (fetchEvent) => {
       }
       // Deal with images
       if (destination === 'image') {
-        if (STATIC_FILES.includes(request.url)) {
+        if (STATIC_FILES.includes(`.${url.pathname}`)) {
           return cacheWithNetworkFallback(request);
         }
         return networkWithTimeout(request, destination, url);
