@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "Progressive Web App demo that showcases flaky network resilience measures",
   "scripts": {
-    "build": "rm -rf docs && mkdir -p docs && cp src/favicon.ico docs && node build/build.js > docs/manifest.webmanifest && imagemin src/img/*.{webp,png,svg,jpg,jpeg} --out-dir=docs/img && minify src/**.js --out-dir docs && minify src/js/**.js --out-dir docs/js && html-minifier --collapse-boolean-attributes --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --custom-attr-collapse /on/ --remove-attribute-quotes --process-scripts 'text/javascript' --sort-attributes --sort-class-name --minify-urls --input-dir ./src --output-dir ./docs --file-ext html",
-    "lint": "eslint src/ --fix"
+    "build": "rm -rf docs && mkdir -p docs && cp src/favicon.ico docs && node build/build.js > docs/manifest.webmanifest && imagemin src/img/*.{webp,png,svg,jpg,jpeg} --out-dir=docs/img && minify src/**.js --out-dir docs && minify src/js/**.js --out-dir docs/js && postcss \"src/css/**.css\" --use cssnano --map false --dir docs/css && html-minifier --collapse-boolean-attributes --collapse-inline-tag-whitespace --collapse-whitespace --minify-css --minify-js --custom-attr-collapse /on/ --remove-attribute-quotes --process-scripts 'text/javascript' --sort-attributes --sort-class-name --minify-urls --input-dir ./src --output-dir ./docs --file-ext html",
+    "lint": "eslint src/ --fix && stylelint src/css/**.css --fix"
   },
   "repository": {
     "type": "git",
@@ -35,11 +35,18 @@
       "node": true
     }
   },
+  "stylelint": {
+    "extends": "stylelint-config-standard"
+  },
   "devDependencies": {
     "babel-minify": "^0.4.3",
+    "cssnano": "^4.1.0",
     "eslint": "^5.5.0",
     "eslint-config-google": "^0.10.0",
     "html-minifier": "^3.5.20",
-    "imagemin-cli": "^3.0.0"
+    "imagemin-cli": "^3.0.0",
+    "postcss-cli": "^6.0.0",
+    "stylelint": "^9.5.0",
+    "stylelint-config-standard": "^18.2.0"
   }
 }

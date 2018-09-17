@@ -1,5 +1,6 @@
 (() => {
   const DEFAULT_SEARCH = 'Felis silvestris catus';
+  const INSTALL_THRESHOLD = 3;
   // eslint-disable-next-line max-len
   const VAPID_PUBLIC_KEY = 'BHuCD9Ym4yXI9Fk0KHrRcPgH2iQOXhoWbzWtm4GQocD1zGYz4IXyazINE_-T4pEojrAgqoGoRnxUgX5CAuguRGo';
 
@@ -100,36 +101,47 @@
       // Metadata
       const priceDrop = catContainer.querySelector('.pricedrop');
       if (pushSupported) {
-        priceDrop.hidden = false;
-        priceDrop.querySelector('input').addEventListener('input', (e) => {
-          const input = e.target;
-          if (input.checked) {
-            const label = input.parentNode;
-            label.innerHTML = label.innerHTML.replace('🛎', '⏳');
-            (async () => {
-              const pushSucceeded = await pushNotifications();
-              input.disabled = pushSucceeded;
-              input.dataset.active = 'false';
-              label.innerHTML = label.innerHTML.replace('⏳', '🛎');
-              priceDrop.querySelector('span').hidden = !pushSucceeded;
-            })();
-          }
+        priceDrop.addEventListener('click', () => {
+          priceDrop.innerHTML = priceDrop.innerHTML.replace('🛎', '⏳');
+          (async () => {
+            const pushSucceeded = await pushNotifications();
+            if (pushSucceeded) {
+              priceDrop.disabled = true;
+              priceDrop.dataset.active = 'false';
+              priceDrop.innerHTML = priceDrop.innerHTML.replace('⏳', '✅');
+            } else {
+              priceDrop.innerHTML = priceDrop.innerHTML.replace('⏳', '🛎');
+            }
+          })();
         });
+        priceDrop.hidden = false;
       } else {
         priceDrop.hidden = true;
       }
-      const stars = catContainer.querySelector('.stars');
-      stars.textContent = `Cuteness rating: ${'😻'.repeat(Math.floor(
+      const cuteness = catContainer.querySelector('.cuteness');
+      cuteness.textContent = `${'😻'.repeat(Math.floor(
           Math.random() * 5) + 1)}`;
       const price = catContainer.querySelector('.price');
-      price.textContent = `Price range: ${'💰'.repeat(Math.floor(
+      price.textContent = `${'💰'.repeat(Math.floor(
           Math.random() * 3) + 1)}`;
       // Outlink
-      const a = catContainer.querySelector('.outlink > a');
-      a.href = `./forward.html?url=${encodeURIComponent(cat.url)}`;
-      a.textContent = 'View Deal';
-      a.addEventListener('click', (e) => {
-        localStorage.setItem('engagement', true);
+      const outlink = catContainer.querySelector('.outlink');
+      const outclickURL = `./forward.html?url=${encodeURIComponent(cat.url)}`;
+      outlink.dataset.href = outclickURL;
+      catContainer.querySelector('.offers').dataset.outclickURL = outclickURL;
+      outlink.textContent = '📦 View Deal';
+      outlink.addEventListener('click', (e) => {
+        let previouslyEngaged = localStorage.getItem('engagement');
+        if (!previouslyEngaged) {
+          localStorage.setItem('engagement', 1);
+        } else {
+          previouslyEngaged = parseInt(previouslyEngaged, 10);
+          if ((!isNaN(previouslyEngaged)) &&
+              (previouslyEngaged < INSTALL_THRESHOLD)) {
+            localStorage.setItem('engagement', ++previouslyEngaged);
+          }
+        }
+        document.location.href = outlink.dataset.href;
       });
       // Tabs
       const tabs = catContainer.querySelector('.tabs');
@@ -169,6 +181,7 @@
   };
 
   const loadOffers = (offers) => {
+    const outclickURL = offers.dataset.outclickURL;
     const fragment = document.createDocumentFragment();
     const url = `https://www.random.org/integers/
         ?num=${Math.floor(Math.random() * 4) + 2}
@@ -188,8 +201,11 @@
               .sort((a, b) => a - b)
               .map((number, index) => {
                 const li = document.createElement('li');
-                li.textContent = /\d+/.test(number) ?
-            `From $${number} at Affiliate ${index}` : number;
+                li.innerHTML = /\d+/.test(number) ?
+                    `<sup>$</sup>
+                    <span class="price">${number}</span> |
+                    <a href="${outclickURL}">Affiliate ${index}</a>` :
+                    number;
                 fragment.appendChild(li);
               });
           offers.innerHTML = '';
@@ -274,8 +290,8 @@
     offline.style.display = 'flex';
     search.disabled = true;
     button.disabled = true;
-    document.querySelectorAll('input[data-active="true"]').forEach((input) => {
-      input.disabled = true;
+    document.querySelectorAll('[data-active="true"]').forEach((item) => {
+      item.disabled = true;
     });
   });
 
@@ -283,8 +299,8 @@
     offline.style.display = 'none';
     search.disabled = false;
     button.disabled = false;
-    document.querySelectorAll('input[data-active="true"]').forEach((input) => {
-      input.disabled = false;
+    document.querySelectorAll('[data-active="true"]').forEach((item) => {
+      item.disabled = false;
     });
     if (main.dataset.hydrated === 'false') {
       init();
@@ -293,6 +309,7 @@
   });
 
   const showSkeletonContent = () => {
+    main.innerHTML = '';
     for (let i = 0; i < 3; i++) {
       const content = template.content;
       const labels = content.querySelectorAll('.tab label');
@@ -304,7 +321,6 @@
         labels[index].setAttribute('for', id);
         tabContents[index].setAttribute('aria-labelledby', id);
       });
-      main.innerHTML = '';
       main.appendChild(document.importNode(content, true));
     }
   };
@@ -317,8 +333,14 @@
     });
 
     window.addEventListener('beforeinstallprompt', (event) => {
-      if (!localStorage.getItem('engagement')) {
+      let previouslyEngaged = localStorage.getItem('engagement');
+      if (!previouslyEngaged) {
         console.log('Install button hidden due to no prior engagement');
+        return;
+      }
+      previouslyEngaged = parseInt(previouslyEngaged, 10);
+      if (isNaN(previouslyEngaged) || previouslyEngaged < INSTALL_THRESHOLD) {
+        console.log('Install button hidden due to not enough prior engagement');
         return;
       }
       event.preventDefault();

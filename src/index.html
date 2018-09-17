@@ -2,15 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#373fff">
     <meta name="description" content="AffiliCats Progressive Web App demo that showcases flaky network resilience measures">
 
+    <link rel="stylesheet" href="./css/main.css">
     <link rel="icon" href="./img/cat.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="preload" href="./img/cat.svg" as="image">
     <link rel="preload" href="./js/main.js" as="script">
+    <link rel="preload" href="./img/cat.png" as="image">
+    <link rel="preload" href="./img/cat.svg" as="image">
     <link rel="preconnect" href="https://commons.wikimedia.org/" crossorigin>
     <link rel="preconnect" href="https://upload.wikimedia.org/" crossorigin>
     <link rel="preconnect" href="https://www.random.org/" crossorigin>
@@ -44,269 +46,20 @@
     </script>
 
     <script src="./js/main.js" defer></script>
-
-    <style>
-      html {
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-      }
-
-      *, *:before, *:after {
-        box-sizing: inherit;
-      }
-
-      body {
-        font-size: 14pt;
-        font-family: "Helvetica Neue", helvetica, arial, sans-serif;
-        margin: .5em;
-        width: 100%;
-        max-width: 500px;
-      }
-
-      header {
-        position: relative;
-      }
-
-      header > a {
-        text-decoration: none;
-      }
-
-      header > p {
-        margin: 0 .25em;
-      }
-
-      h1 {
-        font-style: italic;
-        color: #373fff;
-        margin: 0 .25em;
-      }
-
-      ul {
-        padding-left: 2em;
-        padding-inline-start: 2em;
-      }
-
-      figure {
-        background-color: #eee;
-        border-radius: .25em;
-        padding: 1em;
-        margin: .25em;
-      }
-
-      figure img {
-        width: 100%;
-        object-fit: cover;
-      }
-
-      figcaption {
-        background-color: #eee;
-      }
-
-      form {
-        display: flex;
-      }
-
-      a, span {
-        margin: 0 .25em;
-      }
-
-      .search {
-        background-color: #fff;
-        position: sticky;
-        top: 0;
-        z-index: 1;
-      }
-
-      .search input {
-        font-size: inherit;
-        border: solid black .1em;
-        border-radius: .25em;
-        margin: 1em 0;
-        width: 80%;
-      }
-
-      .search button {
-        font-size: inherit;
-        border: solid black .1em;
-        border-radius: .25em;
-        margin: 1em 0;
-        width: 20%;
-      }
-
-      .install {
-        font-size: inherit;
-        border: solid black .1em;
-        border-radius: .25em;
-        position: absolute;
-        top: 1em;
-        right: 0;
-        width: 5em;
-      }
-
-      .container {
-        border: solid black .1em;
-        border-radius: .25em;
-        margin: 1em 0;
-      }
-
-      .outlink {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 1em;
-      }
-
-      .outlink > a {
-        width: 90%;
-        border: solid 1px #E65100;
-        border-radius: .25em;
-        background-color: #ff9800;
-        color: #263238;
-        margin: .5em 0;
-        padding: .25em;
-        text-align: center;
-        text-decoration: none;
-      }
-
-      .offers {
-        color: #311b92;
-        list-style: none;
-      }
-
-      .stars {
-        color: transparent;
-        text-shadow: 0 0 0 #fdd835;
-      }
-
-      .price {
-        color: transparent;
-        text-shadow: 0 0 0 #607d8b;
-      }
-
-      .pricedrop {
-        padding-left: 2em;
-        padding-inline-start: 2em;
-      }
-
-      .pricedrop label {
-        border: 1px #361594 solid;
-        border-radius: .25em;
-        padding: .25em;
-      }
-
-      .pricedrop input {
-        position: absolute;
-        opacity: 0;
-      }
-
-      .tabs {
-        position: relative;
-        height: 25em;
-        margin: .25em;
-        clear: both;
-      }
-
-      .tab {
-        padding: 1em 0;
-        border-top-left-radius: 1em;
-        border-top-right-radius: 1em;
-        text-align: center;
-        float: left;
-        width: 33.333%;
-      }
-
-      .checkboxtab {
-        opacity: 0;
-        position: absolute;
-      }
-
-      .checkboxtab:focus ~ label {
-        outline: rgb(229, 151, 0) auto 5px;
-        outline: -webkit-focus-ring-color auto 5px;
-      }
-
-      .tabcontent {
-        position: absolute;
-        left: 0;
-        width: 100%;
-        display: none;
-        height: 22em;
-        text-align: left;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-        padding: .25em;
-      }
-
-      .checkboxtab:checked ~ .tabcontent {
-        display: block;
-      }
-
-      .map {
-        object-fit: cover;
-        width: 100%;
-        height: auto;
-        border: solid 1px #eee;
-      }
-
-      .photos {
-        background-color: #2196F3;
-      }
-
-      .reviews {
-        background-color: #03A9F4;
-      }
-
-      .location {
-        background-color: #00bcd4;
-      }
-
-      .gallery {
-        display: grid;
-        grid-gap: .25em;
-        grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
-        grid-auto-rows: 5em 5em;
-        grid-auto-flow: dense;
-        height: 100%;
-      }
-
-      .gallery img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      @media (min-width: 321px) {
-        .gallery img:first-child {
-          grid-area: 1 / 1 / span 2 / span 2;
-        }
-        .gallery img:nth-child(3n) {
-          grid-column: span 2;
-        }
-      }
-
-      .offline {
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        max-width: 500px;
-        height: 5em;
-        background-color: #ccc;
-        text-align: center;
-      }
-    </style>
   </head>
   <body>
     <header>
       <button disabled hidden class="install">📲 Install</button>
-      <a href="./"><h1>🐈 AffiliCats</h1></a>
-      <p>
+      <a href="./"><h1><img src="./img/cat.png" alt=""> AffiliCats</h1></a>
+      <small>
         Find the cutest cats online!
-      </p>
+      </small>
     </header>
     <div class="search">
       <form>
+        <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15.5 14l4.99 5L19 20.49l-5-4.99v-.79l-.27-.28A6.471 6.471 0 0 1 9.5 16 6.5 6.5 0 1 1 16 9.5c0 1.61-.59 3.09-1.57 4.23l.28.27h.79zm-6 0c2.49 0 4.5-2.01 4.5-4.5S11.99 5 9.5 5 5 7.01 5 9.5 7.01 14 9.5 14z"></path>
+        </svg>
         <input type="search" value="" aria-label="search through site content">
         <button type="submit" value="Search">Go</button>
       </form>
@@ -319,33 +72,31 @@
       <div class="container">
         <div class="header">
           <figure>
-            <img alt="Cat placeholder" height="100" src="./img/cat.svg">
+            <img alt="Cat placeholder" src="./img/cat.svg">
             <figcaption>⏳ Loading cats…</figcaption>
           </figure>
+          <ul class="ratings">
+            <li class="cuteness" data-label="Cuteness">⏳</li>
+            <li class="price" data-label="Price">⏳</li>
+          </ul>
           <ul class="offers lazyload">
             <li>⏳ Loading offers…</li>
           </ul>
-          <div hidden class="pricedrop">
-            <label>
-              🛎 Price Drop Alerts
-              <span hidden>✅ Active</span>
-              <input type="checkbox" data-active="true">
-            </label>
+          <div class="actions">
+            <button data-active="true" hidden class="pricedrop">🛎 Price Alerts</button>
+            <button class="outlink">📦 Loading Deal…</button>
           </div>
-        </div>
-        <ul>
-          <li class="stars">Cuteness rating: ⏳</li>
-          <li class="price">Price range: ⏳</li>
-        </ul>
-        <div class="outlink">
-          <a rel="nofollow">Loading Deal…</a>
         </div>
         <div class="tabs" role="tablist">
           <div class="tab photos">
             <input tabindex="0" type="radio" class="checkboxtab" checked role="tab">
             <label>Photos</label>
             <div class="tabcontent photos lazyload" role="tabpanel">
-              ⏳ Loading photos…
+              <div class="gallery">
+                <img alt="Cat placeholder" src="./img/cat.svg">
+                <img alt="Cat placeholder" src="./img/cat.svg">
+                <img alt="Cat placeholder" src="./img/cat.svg">
+              </div>
             </div>
           </div>
           <div class="tab reviews">
