@@ -98,6 +98,7 @@ figcaption {
   display: grid;
   grid-template-columns: 4fr 1fr;
   grid-gap: 1em;
+  position: relative;
   align-items: center;
   margin: 0.5em 0;
 }
@@ -122,7 +123,6 @@ figcaption {
 .search svg {
   position: absolute;
   left: 0.5em;
-  top: 1.4em;
   fill: hsl(0, 0%, 50%);
 }
 
