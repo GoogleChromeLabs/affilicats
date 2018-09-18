@@ -1,0 +1,31 @@
+p {
+  position: relative;
+  margin-top: 2.5em;
+}
+
+#hourglass {
+  position: absolute;
+  top: -2em;
+}
+
+#hourglass.spin {
+  animation-name: spinning;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes spinning {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+a.noclick {
+  pointer-events: none;
+  cursor: notallowed;
+}

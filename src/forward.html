@@ -2,16 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#373fff">
     <meta name="description" content="AffiliCats Progressive Web App demo that showcases flaky network resilience measures">
 
+    <link rel="stylesheet" href="./css/main.css">
+    <link rel="stylesheet" href="./css/forward.css">
     <link rel="icon" href="./img/cat.png">
-
     <link rel="preconnect" href="https://commons.wikimedia.org/" crossorigin>
+    <link rel="manifest" href="./manifest.webmanifest">
 
-    <title>AffiliCats — Find the cutest cats online!</title>
+    <title>AffiliCats — Forwarding you to the cutest cats online!</title>
 
     <script>
       if (location.hostname !== 'localhost' && location.protocol !== 'https:') {
@@ -27,90 +29,9 @@
       }
     </script>
     <script src="./js/forward.js" defer></script>
-
-    <style>
-      html {
-        box-sizing: border-box;
-        display: flex;
-        justify-content: center;
-      }
-
-      *, *:before, *:after {
-        box-sizing: inherit;
-      }
-
-      body {
-        font-size: 14pt;
-        font-family: "Helvetica Neue", helvetica, arial, sans-serif;
-        margin: .5em;
-        width: 100%;
-        max-width: 500px;
-      }
-
-      header > a {
-        text-decoration: none;
-      }
-
-      h1 {
-        font-style: italic;
-        font-size: 2em;
-        color: var(--brand-blue);
-        margin: 0 .25em;
-      }
-
-      h1 > img {
-        height: 1.5em;
-        width: auto;
-      }
-
-      a, span {
-        margin-right: .25em;
-      }
-
-      p {
-        position: relative;
-        margin-top: 2.5em;
-      }
-
-      .offline {
-        display: none;
-        align-items: center;
-        justify-content: center;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        max-width: 500px;
-        height: 5em;
-        background-color: #ccc;
-        text-align: center;
-      }
-
-      #hourglass {
-        position: absolute;
-        top: -2em;
-      }
-
-      #hourglass.spin {
-        animation-name: spinning;
-        animation-duration: 1s;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in-out;
-      }
-
-      @keyframes spinning {
-        from {transform:rotate(0deg);}
-        to {transform:rotate(360deg);}
-      }
-
-      a.noclick {
-        pointer-events: none;
-        cursor: prohibited;
-      }
-    </style>
   </head>
   <body>
     <header>
-      <button tabindex="-1" disabled hidden class="install">📲 Install</button>
       <a href="./"><h1><img src="./img/cat.png" alt=""> AffiliCats</h1></a>
       <small>
         Find the cutest cats online!
@@ -118,11 +39,10 @@
     </header>
     <p>
       <span id="hourglass">⏳</span>
-      <span>Forwarding you to </span>
+      <span>Forwarding you to</span>
       <a href="#" id="forward"></a>
-      <span> in </span>
+      <span>in</span>
       <span id="seconds"></span>
-      <span> seconds…</span>
     </p>
     <div class="offline">⚠️ Seems like we're offline at the moment</div>
     <footer>© 2018 AffiliCats</footer>

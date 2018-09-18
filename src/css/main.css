@@ -329,8 +329,8 @@ button:active {
   justify-content: center;
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
-  max-width: 500px;
   height: 5em;
   background-color: #ccc;
   text-align: center;

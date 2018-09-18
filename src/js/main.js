@@ -1,6 +1,6 @@
 (() => {
   const DEFAULT_SEARCH = 'Felis silvestris catus';
-  const INSTALL_THRESHOLD = 3;
+  const INSTALL_THRESHOLD = 2;
   // eslint-disable-next-line max-len
   const VAPID_PUBLIC_KEY = 'BHuCD9Ym4yXI9Fk0KHrRcPgH2iQOXhoWbzWtm4GQocD1zGYz4IXyazINE_-T4pEojrAgqoGoRnxUgX5CAuguRGo';
 

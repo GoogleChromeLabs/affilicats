@@ -1,4 +1,4 @@
-const VERSION = 1537214365555;
+const VERSION = 1537280075587;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -8,7 +8,6 @@ const HOME_URL = 'https://tomayac.github.io/affilicats/';
 const OFFLINE_IMG_URL = './img/offline.svg';
 const TIMEOUT_IMG_URL = './img/timeout.svg';
 const MANIFEST_URL = './manifest.webmanifest';
-const CSS_URL = './css/main.css';
 const STATIC_FILES = [
   './index.html',
   './forward.html',
@@ -16,7 +15,8 @@ const STATIC_FILES = [
   './js/forward.js',
   './img/cat.png',
   './img/map.svg',
-  CSS_URL,
+  './css/main.css',
+  './css/forward.css',
   MANIFEST_URL,
   OFFLINE_IMG_URL,
   TIMEOUT_IMG_URL,
@@ -192,7 +192,7 @@ self.addEventListener('fetch', (fetchEvent) => {
     if (destination) {
       // Deal with stylesheets
       if (destination === 'style') {
-        return cacheWithNetworkFallback(CSS_URL);
+        return cacheWithNetworkFallback(request);
       }
       // Deal with scripts
       if (destination === 'script') {

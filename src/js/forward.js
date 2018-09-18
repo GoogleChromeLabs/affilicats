@@ -1,9 +1,14 @@
 (() => {
-  const REDIRECT_TIMEOUT = 10;
+  window.addEventListener('beforeinstallprompt', (event) => {
+    // Do nothing, handle from main app
+    return;
+  });
+
+  const REDIRECT_TIMEOUT = 9;
   const offline = document.querySelector('.offline');
   const hourglass = document.getElementById('hourglass');
   const seconds = document.getElementById('seconds');
-  seconds.textContent = REDIRECT_TIMEOUT;
+  seconds.textContent = `${REDIRECT_TIMEOUT} seconds…`;
   const forwardLink = document.getElementById('forward');
 
   const online = navigator.onLine;
@@ -33,9 +38,10 @@
     window.setInterval(() => {
       if (this.running) {
         this.counter++;
-        seconds.textContent = REDIRECT_TIMEOUT - this.counter >= 0 ?
-            REDIRECT_TIMEOUT - this.counter :
-            '0';
+        const countDown = REDIRECT_TIMEOUT - this.counter;
+        seconds.textContent = countDown > 0 ?
+            (countDown > 1 ? `${countDown} seconds…` : `${countDown} second…`) :
+            'no time!';
       }
     }, 1000);
 
