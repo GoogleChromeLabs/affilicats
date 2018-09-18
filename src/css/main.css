@@ -76,7 +76,6 @@ figure img {
 }
 
 figure img[alt="Cat placeholder"] {
-  width: 400px;
   height: 380px;
 }
 

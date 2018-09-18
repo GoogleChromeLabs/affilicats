@@ -1,4 +1,4 @@
-const VERSION = 1537280937635;
+const VERSION = 1537282232284;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
@@ -206,7 +206,7 @@ self.addEventListener('fetch', (fetchEvent) => {
       // Deal with images
       if (destination === 'image') {
         if (STATIC_FILES.includes(
-            `.${url.pathname.replace('/affilicats/', './')}`)) {
+            `${url.pathname.replace('/affilicats/', './')}`)) {
           return cacheWithNetworkFallback(request);
         }
         return networkWithTimeout(request, destination, url);
