@@ -163,12 +163,20 @@ button:active {
   margin-bottom: 2.5em;
 }
 
+.offers {
+  color: #311b92;
+  list-style: none;
+  padding: 1em;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .offers > li {
   border: 1px solid var(--grey-light);
   padding: 0.2em 1em 0.5em 1em;
   border-radius: 2em;
   font-size: 0.9em;
-  color: hsl(0, 0%, 60%);
+  color: hsl(0, 0%, 40%);
   margin: 0  0.5em 0.5em 0;
 }
 
@@ -216,14 +224,6 @@ button:active {
   font-weight: lighter;
   color: hsl(0, 0%, 20%);
   text-shadow: none;
-}
-
-.offers {
-  color: #311b92;
-  list-style: none;
-  padding: 1em;
-  display: flex;
-  flex-wrap: wrap;
 }
 
 .actions {
