@@ -10,10 +10,10 @@ where the conversion action is to click through to a third-party and place the a
 ## Demo
 
 Play with the app at
-👉 [tomayac.github.io/affilicats](https://tomayac.github.io/affilicats/) 👈. 
+👉 [tomayac.github.io/affilicats](https://tomayac.github.io/affilicats/) 👈.
 
 <img alt="Screenshot of the AffiliCats app" src="https://github.com/tomayac/affilicats/blob/master/assets/screenshot.png" width="320">
- 
+
 ## Developing and Building
 
 You can develop in the `/src` folder while you work on the app locally. Lint your code via `npm run lint`.
@@ -24,7 +24,7 @@ You can build to there by running `npm run build`.
 ## Things to try
 
 - **Use the app under ideal conditions:**
-  You should be able to freely click and browse around, content should always lazy-load. 
+  You should be able to freely click and browse around, content should always lazy-load.
 - **Search for something:**
   You should be able to search for anything that has a [Wikimedia Commons category page](https://commons.wikimedia.org/wiki/Category:Topics) with images, for example, "[Elephants](https://commons.wikimedia.org/wiki/Category:Elephants)".
 - **Load while offline:**
@@ -46,7 +46,7 @@ Thanks to [@jeffposnick](https://github.com/jeffposnick) for the thorough review
 
 ## License
 
-Copyright 2018 Thomas Steiner. All rights reserved.
+Copyright 2018 Google LLC. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0.
 
