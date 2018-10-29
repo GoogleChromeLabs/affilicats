@@ -61,17 +61,17 @@
   });
 
   const getCats = async (query) => {
-    const url = `https://commons.wikimedia.org/w/api.php
-        ?action=query
-        &generator=categorymembers
-        &gcmlimit=max
-        &gcmtype=file
-        &gcmtitle=Category:${encodeURIComponent(query.replace(/\s/g, ' '))}
-        &prop=imageinfo
-        &iiurlwidth=500
-        &iiprop=extmetadata|url
-        &iiextmetadatafilter=ImageDescription
-        &format=json&origin=*`.replace(/\n\s*/g, '');
+    const url = 'https://commons.wikimedia.org/w/api.php' +
+        '?action=query' +
+        '&generator=categorymembers' +
+        '&gcmlimit=max' +
+        '&gcmtype=file' +
+        `&gcmtitle=Category:${encodeURIComponent(query.replace(/\s/g, ' '))}` +
+        '&prop=imageinfo' +
+        '&iiurlwidth=500' +
+        '&iiprop=extmetadata|url' +
+        '&iiextmetadatafilter=ImageDescription' +
+        '&format=json&origin=*';
     return fetch(url)
         .then((response) => {
           if (!response.ok) {
@@ -180,14 +180,13 @@
           Math.random() * 90 * 100000) / 100000;
       const long = Math.round((Math.random() < 0.5 ? -1 : 1) *
           Math.random() * 180 * 100000) / 100000;
-      map.dataset.src = `https://maps.googleapis.com/maps/api/staticmap
-          ?autoscale=1
-          &size=500x350
-          &maptype=terrain
-          &key=AIzaSyBWZnCRi6oar3MTjR0HkR1lK52_mTe0Rks
-          &format=png
-          &markers=size:small%7Ccolor:0xfffb00%7C${lat},${long}`
-          .replace(/\n\s*/g, '');
+      map.dataset.src = 'https://maps.googleapis.com/maps/api/staticmap' +
+          '?autoscale=1' +
+          '&size=500x350' +
+          '&maptype=terrain' +
+          '&key=AIzaSyBWZnCRi6oar3MTjR0HkR1lK52_mTe0Rks' +
+          '&format=png' +
+          `&markers=size:small%7Ccolor:0xfffb00%7C${lat},${long}`;
       map.alt = `Map centered on latitude ${lat} and longitude ${long}`;
       tabs.querySelector('.lat').textContent = lat;
       tabs.querySelector('.long').textContent = long;
@@ -200,9 +199,9 @@
   const loadOffers = (offers) => {
     const outclickURL = offers.dataset.outclickURL;
     const fragment = document.createDocumentFragment();
-    const url = `https://www.random.org/integers/
-        ?num=${Math.floor(Math.random() * 4) + 2}
-        &min=5&max=20&col=1&base=10&format=plain&rnd=new`.replace(/\n\s*/g, '');
+    const url = 'https://www.random.org/integers/' +
+        `?num=${Math.floor(Math.random() * 4) + 2}` +
+        '&min=5&max=20&col=1&base=10&format=plain&rnd=new';
     fetch(url)
         .then((response) => {
           if (!response.ok) {
@@ -219,9 +218,9 @@
               .map((number, index) => {
                 const li = document.createElement('li');
                 li.innerHTML = /\d+/.test(number) ?
-                    `<sup>$</sup>
-                    <span class="price">${number}</span> |
-                    <a href="${outclickURL}">Affiliate ${index}</a>` :
+                    '<sup>$</sup>' +
+                    `<span class="price">${number}</span> |` +
+                    `<a href="${outclickURL}">Affiliate ${index}</a>` :
                     number;
                 fragment.appendChild(li);
               });
@@ -516,11 +515,11 @@
       }
       renderCats(cats, template, main);
     } else {
-      main.innerHTML = `<p>😥 No results found.</p>
-          <p>Try anything that is a
-          <a href="https://commons.wikimedia.org/wiki/Category:Topics">
-          Wikimedia Categorie</a>. Maybe try
-          <a href="./?query=Elephants">Elephants</a> 🐘</p>`;
+      main.innerHTML = '<p>😥 No results found.</p>' +
+          '<p>Try anything that is a' +
+          '<a href="https://commons.wikimedia.org/wiki/Category:Topics">' +
+          'Wikimedia Categorie</a>. Maybe try' +
+          '<a href="./?query=Elephants">Elephants</a> 🐘</p>';
     }
     lazyLoadInit();
   };
