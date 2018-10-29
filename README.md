@@ -10,7 +10,7 @@ where the conversion action is to click through to a third-party and place the a
 ## Demo
 
 Play with the app at
-👉 [tomayac.github.io/affilicats](https://tomayac.github.io/affilicats/) 👈.
+👉 [googlechromelabs.github.io/affilicats](https://googlechromelabs.github.io/affilicats/) 👈.
 
 <img alt="Screenshot of the AffiliCats app" src="https://github.com/tomayac/affilicats/blob/master/assets/screenshot.png" width="320">
 
