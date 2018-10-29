@@ -1,19 +1,3 @@
-/**
- * @license
- * Copyright 2018 Google LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 (()=>{var a=Math.floor;const b="Felis silvestris catus",c=2,d=document.querySelector(".offline"),e=document.querySelector("main"),f=document.querySelector("input[type=\"search\"]"),g=document.querySelector("button[type=\"submit\"]"),h=document.getElementById("cat"),i=document.querySelector(".install");let j,k;const l=new IntersectionObserver(a=>{a.forEach(a=>{if(0<a.intersectionRatio){const b=a.target;if(l.unobserve(b),"IMG"===b.nodeName)return b.src=`${b.dataset.src}${/\?/.test(b.dataset.src)?"&":"?"}${Math.random().toString().substr(2)}`;const c=b.classList;if(c.contains("photos"))return q(b);if(c.contains("reviews"))return p(b);if(c.contains("offers"))return o(b)}})}),m=async a=>{const b=`https://commons.wikimedia.org/w/api.php
         ?action=query
         &generator=categorymembers

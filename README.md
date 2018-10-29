@@ -12,7 +12,7 @@ where the conversion action is to click through to a third-party and place the a
 Play with the app at
 👉 [googlechromelabs.github.io/affilicats](https://googlechromelabs.github.io/affilicats/) 👈.
 
-<img alt="Screenshot of the AffiliCats app" src="https://github.com/tomayac/affilicats/blob/master/assets/screenshot.png" width="320">
+<img alt="Screenshot of the AffiliCats app" src="https://github.com/GoogleChromeLabs/affilicats/blob/master/assets/screenshot.png" width="320">
 
 ## Developing and Building
 

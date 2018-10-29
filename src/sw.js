@@ -15,12 +15,12 @@
  * limitations under the License.
  */
 
-const VERSION = 1537434172586;
+const VERSION = 1540807949274;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
 
-const HOME_URL = 'https://tomayac.github.io/affilicats/';
+const HOME_URL = 'https://googlechromelabs.github.io/affilicats/';
 
 const OFFLINE_IMG_URL = './img/offline.svg';
 const TIMEOUT_IMG_URL = './img/timeout.svg';
