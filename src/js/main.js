@@ -210,7 +210,7 @@
           return response.text();
         })
         .then((text) => {
-          let numbers = text.split(/\n/g);
+          const numbers = text.split(/\n/g);
           numbers.splice(-1, 1);
           numbers.map((text) => isNaN(parseInt(text, 10)) ?
           text : parseInt(text + '9', 10))
