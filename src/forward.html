@@ -27,6 +27,9 @@
         window.URLSearchParams = void 0;
         document.write('<script src="https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js"><\/script>');
       }
+      if (window.NodeList && !NodeList.prototype.forEach) {
+        NodeList.prototype.forEach = Array.prototype.forEach;
+      }
     </script>
     <script nomodule src="./js/polyfill-legacy.js" defer></script>
     <script nomodule src="./js/forward-legacy.js" defer></script>

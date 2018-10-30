@@ -43,6 +43,9 @@
         document.write('<script src="https://unpkg.com/url-search-params@1.1.0/build/url-search-params.js"><\/script>');
         localStorage.setItem('URLSearchParams', 'polyfill');
       }
+      if (window.NodeList && !NodeList.prototype.forEach) {
+        NodeList.prototype.forEach = Array.prototype.forEach;
+      }
     </script>
     <script nomodule src="./js/polyfill-legacy.js" defer></script>
     <script nomodule src="./js/main-legacy.js" defer></script>
