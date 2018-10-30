@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./css/main.css">
     <link rel="icon" href="./img/cat.png">
     <link rel="manifest" href="./manifest.webmanifest">
-    <link rel="preload" href="./js/main.js" as="script">
+    <link rel="modulepreload" href="./js/main.js">
     <link rel="preload" href="./img/cat.png" as="image">
     <link rel="preload" href="./img/cat.svg" as="image">
     <link rel="preconnect" href="https://commons.wikimedia.org/" crossorigin>
@@ -45,7 +45,7 @@
       }
     </script>
     <script nomodule sr="./js/main-legacy.js" defer></script>
-    <script src="./js/main.js" defer></script>
+    <script type="module" src="./js/main.js" defer></script>
   </head>
   <body>
     <header>

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-const VERSION = 1540807949274;
+const VERSION = 1540904196177;
 const OFFLINE_CACHE = `offline_${VERSION}`;
 
 const TIMEOUT = 5000;
