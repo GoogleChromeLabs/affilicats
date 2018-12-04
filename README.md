@@ -7,21 +7,19 @@ The core idea is to simulate an affiliate or comparison app with various API cal
 where the conversion action is to click through to a third-party and place the affiliate cookie
 (that's the click the app never wants to lose).
 
-## Demo
+This application is used as the running example in the **accompanying YouTube series** called
+[Why Build Progressive Web Apps](https://www.youtube.com/results?search_query=%22why+build+progressive+web+apps%22+%22thomas+steiner%22+%22Google+Chrome+Developers%22).
+
+## 👀 See the Demo
 
 Play with the app at
 👉 [googlechromelabs.github.io/affilicats](https://googlechromelabs.github.io/affilicats/) 👈.
 
 <img alt="Screenshot of the AffiliCats app" src="https://github.com/GoogleChromeLabs/affilicats/blob/master/assets/screenshot.png" width="320">
 
-## Developing and Building
+## 🔬 Things to try
 
-You can develop in the `/src` folder while you work on the app locally. Lint your code via `npm run lint`.
-
-The app is remotely [deployed from the `/docs` folder](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch).
-You can build to there by running `npm run build`.
-
-## Things to try
+### [📺 Episode 1](https://www.youtube.com/watch?v=4UK_TDTTWnQ)
 
 - **Use the app under ideal conditions:**
   You should be able to freely click and browse around, content should always lazy-load.
@@ -40,12 +38,26 @@ You can build to there by running `npm run build`.
 - **Use an ultra slow network:**
   You should see timeout placeholders (a little clock icon) and info text for timed-out requests.
 
-## Acknowledgements
+### [📺 Episode 2](https://www.youtube.com/watch?v=vRsVx8_94UQ)
+
+- **Sign up for "Price Alerts":**
+  After clicking the "Price Alerts" button, you should receive a push notification after a couple of seconds.
+  As an additonal step, try quitting your web browser immediately after clicking the button
+  and the push notification should still arrive. 
+
+## 💻 Developing and Building
+
+You can develop in the `/src` folder while you work on the app locally. Lint your code via `npm run lint`.
+
+The app is remotely [deployed from the `/docs` folder](https://help.github.com/articles/configuring-a-publishing-source-for-github-pages/#publishing-your-github-pages-site-from-a-docs-folder-on-your-master-branch).
+You can build to there by running `npm run build`.
+
+## 🙏 Acknowledgements
 
 Thanks to [@jeffposnick](https://github.com/jeffposnick) for the thorough(!) review of the app's service worker code
 and [@argyleink](https://github.com/argyleink) for the amazing(!) design.
 
-## License
+## ⚖️ License
 
 Copyright 2018 Google LLC. All rights reserved.
 
