@@ -44,6 +44,11 @@ Play with the app at
   After clicking the "Price Alerts" button, you should receive a push notification after a couple of seconds.
   As an additonal step, try quitting your web browser immediately after clicking the button
   and the push notification should still arrive. 
+  
+### [📺 Episode 3](https://youtu.be/kENeCdS3fzU)
+
+- **See the custom "Install" button:**
+  Click through twice on any of the "View Deal" buttons and notice how the individual "Install" button appears.
 
 ## 💻 Developing and Building
 
