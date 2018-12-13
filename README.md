@@ -19,7 +19,7 @@ Play with the app at
 
 ## 🔬 Things to try
 
-### [📺 Episode 1](https://www.youtube.com/watch?v=4UK_TDTTWnQ)
+### [📺 Episode 1](https://www.youtube.com/watch?v=4UK_TDTTWnQ) / [📝 Write-Up](https://medium.com/dev-channel/why-build-progressive-web-apps-never-lose-a-click-out-video-write-up-74cbbc466afd)
 
 - **Use the app under ideal conditions:**
   You should be able to freely click and browse around, content should always lazy-load.
@@ -38,14 +38,14 @@ Play with the app at
 - **Use an ultra slow network:**
   You should see timeout placeholders (a little clock icon) and info text for timed-out requests.
 
-### [📺 Episode 2](https://www.youtube.com/watch?v=vRsVx8_94UQ)
+### [📺 Episode 2](https://www.youtube.com/watch?v=vRsVx8_94UQ) / [📝 Write-Up](https://medium.com/dev-channel/why-build-progressive-web-apps-push-but-dont-be-pushy-video-write-up-aa78296886e)
 
 - **Sign up for "Price Alerts":**
   After clicking the "Price Alerts" button, you should receive a push notification after a couple of seconds.
   As an additonal step, try quitting your web browser immediately after clicking the button
   and the push notification should still arrive. 
   
-### [📺 Episode 3](https://youtu.be/kENeCdS3fzU)
+### [📺 Episode 3](https://youtu.be/kENeCdS3fzU) / [📝 Write-Up](https://medium.com/dev-channel/why-build-progressive-web-apps-if-its-just-a-bookmark-it-s-not-a-pwa-video-write-up-7ccca1c58034)
 
 - **See the custom "Install" button:**
   Click through twice on any of the "View Deal" buttons and notice how the individual "Install" button appears.
