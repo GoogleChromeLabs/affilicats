@@ -15,7 +15,7 @@ This application is used as the running example in the **accompanying YouTube se
 Play with the app at
 👉 [googlechromelabs.github.io/affilicats](https://googlechromelabs.github.io/affilicats/) 👈.
 
-<img alt="Screenshot of the AffiliCats app" src="https://github.com/GoogleChromeLabs/affilicats/blob/master/assets/screenshot.png" width="320">
+<img alt="Screenshot of the AffiliCats app" src="https://github.com/GoogleChromeLabs/affilicats/blob/main/assets/screenshot.png" width="320">
 
 ## 🔬 Things to try
 
